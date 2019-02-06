@@ -1,0 +1,672 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>1. Introduction to the Theory of Computation &#8212; Computational Models  documentation</title>
+    <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Computational Models  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1. Introduction to the Theory of Computation</a><ul>
+<li><a class="reference internal" href="#propositional-logic">1.1. Propositional Logic</a><ul>
+<li><a class="reference internal" href="#propositional-logic-operators">1.1.1. Propositional Logic Operators</a></li>
+<li><a class="reference internal" href="#proof-by-truth-tables">1.1.2. Proof by Truth-Tables</a></li>
+<li><a class="reference internal" href="#practice">1.1.3. Practice</a></li>
+<li><a class="reference internal" href="#equivalence-and-inference-rules">1.1.4. Equivalence and Inference Rules</a></li>
+<li><a class="reference internal" href="#proof-by-derivation">1.1.5. Proof by Derivation</a></li>
+<li><a class="reference internal" href="#proof-by-contradiction">1.1.6. Proof by Contradiction</a></li>
+<li><a class="reference internal" href="#other-proof-techniques">1.1.7. Other Proof techniques</a></li>
+<li><a class="reference internal" href="#exercises">1.1.8. Exercises</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sets">1.2. Sets</a><ul>
+<li><a class="reference internal" href="#id1">1.2.1. Exercises</a></li>
+<li><a class="reference internal" href="#infinite-sets">1.2.2. Infinite Sets</a></li>
+<li><a class="reference internal" href="#id2">1.2.3. Exercises</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#functions-and-relations">1.3. Functions and Relations</a></li>
+<li><a class="reference internal" href="#graphs-and-trees">1.4. Graphs and Trees</a></li>
+<li><a class="reference internal" href="#three-basic-concepts">1.5. Three Basic Concepts</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/source/chap1/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="introduction-to-the-theory-of-computation">
+<h1>1. Introduction to the Theory of Computation<a class="headerlink" href="#introduction-to-the-theory-of-computation" title="Permalink to this headline">¶</a></h1>
+<p>Chapter One of Linz’s text introduces vocabulary and proof techniques. Here I am adding a couple sections on Propositional Logic and Set Theory. It is a good idea to understand sets and logic when studying formal languages and their accepting machine counter-parts. We’ll learn a little logic first and then some set theory.</p>
+<div class="section" id="propositional-logic">
+<h2>1.1. Propositional Logic<a class="headerlink" href="#propositional-logic" title="Permalink to this headline">¶</a></h2>
+<p>There are problems in life and in theoretical computer science or mathematics where we state that certain facts are true or false. Sometimes a fact’s truth-value implies the truth or falsity of another fact.
+To deal with true and false facts and their implications, a philosopher named Aristotle developed a formal logic system called propositional logic. In propositional logic we can have the following.</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Things that may be true or false are called propositional variables and are usually represented by a capital letter, like A, B, or C.</p>
+</li>
+<li><p class="first">A propositional expression consists of propositional variables or other propositional expressions joined by one of the propositional operators which are</p>
+<blockquote>
+<div><ul class="simple">
+<li><img class="math" src="../../_images/math/4fd4d6ef66c9767263b2844d8a7f7a2468cd3ed5.png" alt="P1 \wedge P2"/> which means  <img class="math" src="../../_images/math/81ce9b996e3ef2667e4a9c0b260761cc0e82053d.png" alt="P1"/> AND <img class="math" src="../../_images/math/922c9067b8d042311afe217a686fa1dece1d9c37.png" alt="P2"/> and is called <em>conjunction</em>.</li>
+<li><img class="math" src="../../_images/math/2bc7746c7d60fd333245bac90c7b9d9f808490e2.png" alt="P1 \vee P2"/> which means  <img class="math" src="../../_images/math/81ce9b996e3ef2667e4a9c0b260761cc0e82053d.png" alt="P1"/> OR <img class="math" src="../../_images/math/922c9067b8d042311afe217a686fa1dece1d9c37.png" alt="P2"/> and is called <em>disjunction</em>.</li>
+<li><img class="math" src="../../_images/math/2cfe4bba60af0396a6d88125e6619fa19cc59310.png" alt="P'"/> which means NOT <img class="math" src="../../_images/math/9dcbbef8e0f76051d388013b90a95bec3069e484.png" alt="P"/> and is called <em>negation</em>.</li>
+<li><img class="math" src="../../_images/math/590542f3564855e16cfadbb4e96abc267f518f60.png" alt="P1 \rightarrow P2"/> which means <img class="math" src="../../_images/math/81ce9b996e3ef2667e4a9c0b260761cc0e82053d.png" alt="P1"/> IMPLIES <img class="math" src="../../_images/math/922c9067b8d042311afe217a686fa1dece1d9c37.png" alt="P2"/> and is called <em>implication</em>. <img class="math" src="../../_images/math/81ce9b996e3ef2667e4a9c0b260761cc0e82053d.png" alt="P1"/> is called the <em>antecedent</em> and <img class="math" src="../../_images/math/922c9067b8d042311afe217a686fa1dece1d9c37.png" alt="P2"/> is called the <em>conclusion</em>.</li>
+<li><img class="math" src="../../_images/math/baad5002a9579da49b86ba216cbca3f4fc3b5b5f.png" alt="P1 \leftrightarrow P2"/> which means <img class="math" src="../../_images/math/81ce9b996e3ef2667e4a9c0b260761cc0e82053d.png" alt="P1"/> IMPLIES <img class="math" src="../../_images/math/922c9067b8d042311afe217a686fa1dece1d9c37.png" alt="P2"/> and <img class="math" src="../../_images/math/922c9067b8d042311afe217a686fa1dece1d9c37.png" alt="P2"/> IMPLIES <img class="math" src="../../_images/math/81ce9b996e3ef2667e4a9c0b260761cc0e82053d.png" alt="P1"/> and is called <em>if and only if</em> which is usually abbreviated as iff.</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+<p>Parentheses and braces may be used to override the precedence of operations. Otherwise, negation has the highest precedence followed by conjunction, then disjunction, and finally implication and iff.</p>
+<div class="section" id="propositional-logic-operators">
+<h3>1.1.1. Propositional Logic Operators<a class="headerlink" href="#propositional-logic-operators" title="Permalink to this headline">¶</a></h3>
+<p>Now that we have seen how the logical operators are written in propositional logic, we need to understand precisely how they can be used to operate on the logical values true and false. Each logical operator operates on one or two propositional expressions and itself denotes a propositional expression. The table below provides the truth value that results from the truth or falsity of its one or two subexpressions. Consider <img class="math" src="../../_images/math/0043fe6507e9b1d112e07a2801e24927e267dd50.png" alt="A"/> and <img class="math" src="../../_images/math/9805f44feec6f81d376d09e88b8236635edbb3c8.png" alt="B"/>, two propositional expressions with the truth values provided below. This truth-table shows the result of combining these two propostional expressions by using the given operator and with the given truth values.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="9%" />
+<col width="9%" />
+<col width="10%" />
+<col width="14%" />
+<col width="16%" />
+<col width="20%" />
+<col width="23%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><img class="math" src="../../_images/math/0043fe6507e9b1d112e07a2801e24927e267dd50.png" alt="A"/></th>
+<th class="head"><img class="math" src="../../_images/math/9805f44feec6f81d376d09e88b8236635edbb3c8.png" alt="B"/></th>
+<th class="head"><img class="math" src="../../_images/math/eca47b1c7a15417a313bbdb4d57d117e4694bf87.png" alt="A'"/></th>
+<th class="head"><img class="math" src="../../_images/math/4cb7f2911b791680abd87a5e6c5cdd2cf828c6b6.png" alt="A\vee B"/></th>
+<th class="head"><img class="math" src="../../_images/math/81a4457ec46d1cdb23314b1ef664ecb4dbf7e212.png" alt="A \wedge B"/></th>
+<th class="head"><img class="math" src="../../_images/math/6c3c7e892fdea69fceec6b18d6a6b254a8a771bb.png" alt="A \rightarrow B"/></th>
+<th class="head"><img class="math" src="../../_images/math/100e08e40ec9a91d18ed55f5a8eb7bca09ccc6b5.png" alt="A \leftrightarrow B"/></th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>F</td>
+<td>F</td>
+<td>T</td>
+<td>F</td>
+<td>F</td>
+<td>T</td>
+<td>T</td>
+</tr>
+<tr class="row-odd"><td>F</td>
+<td>T</td>
+<td>T</td>
+<td>T</td>
+<td>F</td>
+<td>T</td>
+<td>F</td>
+</tr>
+<tr class="row-even"><td>T</td>
+<td>F</td>
+<td>F</td>
+<td>T</td>
+<td>F</td>
+<td>F</td>
+<td>F</td>
+</tr>
+<tr class="row-odd"><td>T</td>
+<td>T</td>
+<td>F</td>
+<td>T</td>
+<td>T</td>
+<td>T</td>
+<td>T</td>
+</tr>
+</tbody>
+</table>
+<p>Using propositional logic we may be asked to prove something is true or false. This can be done in one of two different ways. Either an exhaustive proof may be constructed using a truth-table or you may use logical simplification rules to reduce or simplify a propositional statement to true or false. First we’ll look at truth-tables, then we’ll consider an example where the propositional expression is reduced via these simplification rules.</p>
+</div>
+<div class="section" id="proof-by-truth-tables">
+<h3>1.1.2. Proof by Truth-Tables<a class="headerlink" href="#proof-by-truth-tables" title="Permalink to this headline">¶</a></h3>
+<p>If we are asked to prove a propositional logic expression, often called a sentence, is true or false, we can construct a proof table to show exhaustively that it is true in all circumstances.</p>
+<p>For instance, consider this expression.</p>
+<p>Prove <img class="math" src="../../_images/math/bf809ecc03a70d53e73de15d21eadf8f653d93fe.png" alt="(A \rightarrow B) \rightarrow (A' \vee B)"/>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="19%" />
+<col width="15%" />
+<col width="39%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><img class="math" src="../../_images/math/0043fe6507e9b1d112e07a2801e24927e267dd50.png" alt="A"/></th>
+<th class="head"><img class="math" src="../../_images/math/9805f44feec6f81d376d09e88b8236635edbb3c8.png" alt="B"/></th>
+<th class="head"><img class="math" src="../../_images/math/eca47b1c7a15417a313bbdb4d57d117e4694bf87.png" alt="A'"/></th>
+<th class="head"><img class="math" src="../../_images/math/2d4bf7552c9758780b992310d5b24242f59d2d27.png" alt="A\rightarrow B"/></th>
+<th class="head"><img class="math" src="../../_images/math/0bf1ea80566cdf3ccd081e21d5c94772ab4ef0c5.png" alt="A' \vee B"/></th>
+<th class="head"><img class="math" src="../../_images/math/215b6724d41eec20ce62e102d3f31431ae2fbcd4.png" alt="(A\rightarrow B) \rightarrow (A' \vee B)"/></th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>F</td>
+<td>F</td>
+<td>T</td>
+<td>T</td>
+<td>T</td>
+<td>T</td>
+</tr>
+<tr class="row-odd"><td>F</td>
+<td>T</td>
+<td>T</td>
+<td>T</td>
+<td>T</td>
+<td>T</td>
+</tr>
+<tr class="row-even"><td>T</td>
+<td>F</td>
+<td>F</td>
+<td>F</td>
+<td>F</td>
+<td>T</td>
+</tr>
+<tr class="row-odd"><td>T</td>
+<td>T</td>
+<td>F</td>
+<td>T</td>
+<td>T</td>
+<td>T</td>
+</tr>
+</tbody>
+</table>
+<p>The truth-table above proves that <img class="math" src="../../_images/math/bf809ecc03a70d53e73de15d21eadf8f653d93fe.png" alt="(A \rightarrow B) \rightarrow (A' \vee B)"/> is a true statement. Another name for a statement which is always true is a <em>tautology</em>. In this case, it does not matter what truth values are assigned to <img class="math" src="../../_images/math/0043fe6507e9b1d112e07a2801e24927e267dd50.png" alt="A"/> and <img class="math" src="../../_images/math/9805f44feec6f81d376d09e88b8236635edbb3c8.png" alt="B"/>.</p>
+<p>Take another look at this truth-table. Notice that each column of the truth-table adds just one more logical operator. Also notice that all possible values of true and false are covered for <img class="math" src="../../_images/math/0043fe6507e9b1d112e07a2801e24927e267dd50.png" alt="A"/> and <img class="math" src="../../_images/math/9805f44feec6f81d376d09e88b8236635edbb3c8.png" alt="B"/> by starting with two falses and then two trues for <img class="math" src="../../_images/math/0043fe6507e9b1d112e07a2801e24927e267dd50.png" alt="A"/> and alternating true and false for <img class="math" src="../../_images/math/9805f44feec6f81d376d09e88b8236635edbb3c8.png" alt="B"/>. If there were three variables in the statement, then there would be four falses followed by four trues for the first variable, then two falses and two trues alternating for the second variable, and finally true/false alternating for the third variable. By using this systematic approach you can be sure to capture all combinations of true and false for a statment. If there are three variables in your statement, then eight rows would be needed in the truth-table. <img class="math" src="../../_images/math/8853752cfb166a132cb611b9ec9b59b4a7ce67a0.png" alt="2^{numberOfVariables}"/> is the number of rows needed in a truth-table to prove that a statement is true or not under all interpretations.</p>
+</div>
+<div class="section" id="practice">
+<h3>1.1.3. Practice<a class="headerlink" href="#practice" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li>Use a truth table to prove that <img class="math" src="../../_images/math/6c3c7e892fdea69fceec6b18d6a6b254a8a771bb.png" alt="A \rightarrow B"/> is not the same as <img class="math" src="../../_images/math/61e66fd667a492a3bcc4e4a5e4e4a75eb05e10a0.png" alt="B \rightarrow A"/>. <img class="math" src="../../_images/math/61e66fd667a492a3bcc4e4a5e4e4a75eb05e10a0.png" alt="B \rightarrow A"/> is called the <em>converse</em> of <img class="math" src="../../_images/math/6c3c7e892fdea69fceec6b18d6a6b254a8a771bb.png" alt="A \rightarrow B"/> and they do not mean the same thing.</li>
+<li>Use a truth table to prove that <img class="math" src="../../_images/math/aef91073cf390056b48a43870275582b2819b497.png" alt="A \rightarrow B \leftrightarrow B' \rightarrow A'"/>. <img class="math" src="../../_images/math/c475692e0c04943706ab828d2c6576a4dd416270.png" alt="B' \rightarrow A'"/> is called the <em>contrapositive</em> of <img class="math" src="../../_images/math/6c3c7e892fdea69fceec6b18d6a6b254a8a771bb.png" alt="A \rightarrow B"/> and the two statements are equivalent.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="equivalence-and-inference-rules">
+<h3>1.1.4. Equivalence and Inference Rules<a class="headerlink" href="#equivalence-and-inference-rules" title="Permalink to this headline">¶</a></h3>
+<p>Another way to prove a statement is true or false is through the use of equivalences and inference rules for propositional logic. The proof in the previous section actually hints at one of these rules. It turns out that not only does <img class="math" src="../../_images/math/215b6724d41eec20ce62e102d3f31431ae2fbcd4.png" alt="(A\rightarrow B) \rightarrow (A' \vee B)"/> but also <img class="math" src="../../_images/math/a016eb6cb3e11b90fe2092f57f6e28853907973b.png" alt="(A' \vee B) \rightarrow (A\rightarrow B)"/>. In other words <img class="math" src="../../_images/math/fe605cf69d42079d56d6230d22193751ea6a8865.png" alt="(A\rightarrow B) \iff (A' \vee B)"/>. This double arrow is pronounced, “equivalent” and indicates that the two expressions have the same truth values in all interpretations. Another way to state this is <img class="math" src="../../_images/math/ed95199346725f906e462b70adcce284ac331d79.png" alt="(A\rightarrow B) \leftrightarrow (A' \vee B)"/>. So, one can replace the other. Here are some of the important equivalences in propositional logic.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><img class="math" src="../../_images/math/376d098492c07a5d8ce04a8754dfb305fced3b9a.png" alt="A \vee B \iff B \vee A"/>, <em>Commutativity</em></li>
+<li><img class="math" src="../../_images/math/c185e16d9335e8316205fc833a0510e183decd55.png" alt="A \wedge B \iff B \wedge A"/>, <em>Commutativity</em></li>
+<li><img class="math" src="../../_images/math/cf8d5e6a099e2acdedf09899455e50e4ab94ce87.png" alt="(A \vee B) \vee C \iff A \vee (B \vee C)"/>, <em>Associativity</em></li>
+<li><img class="math" src="../../_images/math/1217823552fed740d53cb661678eda6483abd120.png" alt="(A \wedge B) \wedge C \iff A \wedge (B \wedge C)"/>, <em>Associativity</em></li>
+<li><img class="math" src="../../_images/math/400be6cb893e6ae35e73623e86dfd6e105f18564.png" alt="A \wedge (B \vee C) \iff (A \wedge B) \vee (A \wedge C)"/>, <em>Distribution</em></li>
+<li><img class="math" src="../../_images/math/c9bf2c273426e753ef167390005dc61accf441fa.png" alt="A \vee (B \wedge C) \iff (A \vee B) \wedge (A \vee C)"/>, <em>Distribution</em></li>
+<li><img class="math" src="../../_images/math/a20ec214dad01c06937d9bcd8800c2063c5cc9e3.png" alt="A\rightarrow B \iff A' \vee B"/>, <em>Implication</em></li>
+<li><img class="math" src="../../_images/math/4b98d40b485b21ca80f410e19dfe6cecb8f591de.png" alt="(A \vee B) \wedge B' \iff A"/>, <em>Simplification</em></li>
+<li><img class="math" src="../../_images/math/50c25c34fcdcbf179463f84e91d328e426e283c7.png" alt="A \wedge A' \iff False"/>, <em>Complementation</em></li>
+<li><img class="math" src="../../_images/math/b067b3961d3bdb491ac9c5cad4a05589c246d3cd.png" alt="A \vee A' \iff True"/>, <em>Complementation</em></li>
+<li><img class="math" src="../../_images/math/08caed31bba0aae26bd655ff9265d952fbbc1b76.png" alt="A \wedge A \iff A"/>, <em>Idempotent</em></li>
+<li><img class="math" src="../../_images/math/f298631947aeb380fd40fd8a5c4b9b74de8ce10b.png" alt="A \vee A \iff A"/>, <em>Idempotent</em></li>
+<li><img class="math" src="../../_images/math/e603218bac9e222a22df23117066d3d0821082ab.png" alt="A \vee True \iff True"/>, <em>Identity</em></li>
+<li><img class="math" src="../../_images/math/8da5322fdbb916e8a1de7551c8c198f70b0938ef.png" alt="A \vee False \iff A"/>, <em>Identity</em></li>
+<li><img class="math" src="../../_images/math/8dc5e3c25b6027a30ee6c97d75416d1084ee04a2.png" alt="A \wedge False \iff False"/>, <em>Identity</em></li>
+<li><img class="math" src="../../_images/math/a3d17580e6c8e37b2dd9b8eeab5c1c5dc235d4cc.png" alt="A \wedge True \iff A"/>, <em>Identity</em></li>
+<li><img class="math" src="../../_images/math/dcdf3cb7d68cab5dc47b10f2b51fd4237158df52.png" alt="A'' \iff A"/>, <em>Double Negation</em></li>
+<li><img class="math" src="../../_images/math/3d51ad21add905c844690b8c7744bb50aea7d4a4.png" alt="A \leftrightarrow B \iff (A \rightarrow B) \wedge (B \rightarrow A)"/>, <em>iff</em> for if and only if.</li>
+<li><img class="math" src="../../_images/math/d8735ccfc43a9c1b927852486048cd9371c692bb.png" alt="(A \vee B)' \iff A' \wedge B'"/>, <em>DeMorgan’s Law</em></li>
+<li><img class="math" src="../../_images/math/a6312047dbd45fb5970b64262faf47c5add40c8d.png" alt="(A \wedge B)' \iff A' \vee B'"/>. <em>DeMorgan’s Law</em></li>
+<li><img class="math" src="../../_images/math/4119dba21e26e0de2885c14fc384e6d824bdab3a.png" alt="A \Longrightarrow A \vee B"/>, <em>Addition</em></li>
+<li><img class="math" src="../../_images/math/4324e7328050c972b839352c7986208d0dd84493.png" alt="A \wedge (A \vee B) \iff A"/>, <em>Absorption</em></li>
+<li><img class="math" src="../../_images/math/1535d40a7e0beafba21afe9d207d4e3c08b8fa57.png" alt="A \vee (A \wedge B) \iff A"/>, <em>Absorption</em></li>
+</ol>
+</div></blockquote>
+<p>In proofs we may also use some rules of inference when trying to infer whether a statement is true or false. Here are the rules of inference.</p>
+<blockquote>
+<div><ol class="arabic simple" start="24">
+<li><img class="math" src="../../_images/math/0db2a0dccaaee8c15906e710279f32207e99107b.png" alt="A \wedge (A \rightarrow B) \iff B"/>, <em>modus ponens</em></li>
+<li><img class="math" src="../../_images/math/f4739b0f2730649d612d3f5f10b1f951b549203b.png" alt="(A \rightarrow B) \wedge B' \iff A'"/> <em>modus tolens</em></li>
+<li><img class="math" src="../../_images/math/e11e5dd435cc3281411572cfeac97d8c179c0548.png" alt="(A \vee B) \wedge (A' \vee C) \iff B \vee C"/>, <em>resolution</em></li>
+</ol>
+</div></blockquote>
+</div>
+<div class="section" id="proof-by-derivation">
+<h3>1.1.5. Proof by Derivation<a class="headerlink" href="#proof-by-derivation" title="Permalink to this headline">¶</a></h3>
+<p>We can now prove statements to be true in propositional logic using these equivalence and inference rules. To do this, we start with the original statement and using the rules in the previous section we arrive at the value of true. Using these rules we prove that statements are <em>valid</em> meaning that they are true regardless of the truth values assigned to the individual variables. We call the assignment of variables to truth values an <em>interpretation</em> or a <em>model</em>. We want to prove that a statement is <em>valid</em> which means that it is true in all <em>interpretations</em>.
+Let’s consider an example to see how a proof can be constructed from these equivalences. Consider proving</p>
+<blockquote>
+<div><img class="math" src="../../_images/math/91df18405c7df370c8fee61e897456170b8ba382.png" alt="[(A \vee B) \rightarrow C] \wedge (C \rightarrow D) \wedge A \rightarrow D"/></div></blockquote>
+<p>Here is the proof. Each line refers to one of the equivalences above which was used in simplifying it from the previous step.</p>
+<blockquote>
+<div><ul class="simple">
+<li>We start with what we want to prove,</li>
+<li><img class="math" src="../../_images/math/91df18405c7df370c8fee61e897456170b8ba382.png" alt="[(A \vee B) \rightarrow C] \wedge (C \rightarrow D) \wedge A \rightarrow D"/> <img class="math" src="../../_images/math/f09b8753197e4945aa2be43106138e6130ac4b43.png" alt="\iff"/></li>
+<li><img class="math" src="../../_images/math/8861cc996efa70025ed29df4fb544ab5b2b29211.png" alt="[(A \vee B)' \vee C] \wedge (C \rightarrow D) \wedge A \rightarrow D"/>, by (7) <img class="math" src="../../_images/math/f09b8753197e4945aa2be43106138e6130ac4b43.png" alt="\iff"/></li>
+<li><img class="math" src="../../_images/math/4b421ab325bd96c69ed33831a98e5c695a6c7386.png" alt="[(A' \wedge B') \vee C] \wedge (C \rightarrow D) \wedge A \rightarrow D"/>, by (19) <img class="math" src="../../_images/math/f09b8753197e4945aa2be43106138e6130ac4b43.png" alt="\iff"/></li>
+<li><img class="math" src="../../_images/math/a3bf53206c46567af38c07ba3038850b7d4ab364.png" alt="[(A' \wedge B') \vee C] \wedge (C' \vee D) \wedge A \rightarrow D"/>, by (7) <img class="math" src="../../_images/math/f09b8753197e4945aa2be43106138e6130ac4b43.png" alt="\iff"/></li>
+<li><img class="math" src="../../_images/math/9c3ef564c2dba583f059a6eff9ee1870ea1d441c.png" alt="[(A' \wedge B') \vee D] \wedge A \rightarrow D"/>, by (26) and (1) <img class="math" src="../../_images/math/f09b8753197e4945aa2be43106138e6130ac4b43.png" alt="\iff"/></li>
+<li><img class="math" src="../../_images/math/350740f5a4307c485abd6f11b190c83268ed1169.png" alt="[(A' \vee D) \wedge (B' \vee D)] \wedge A \rightarrow D"/>, by (6) and (1) <img class="math" src="../../_images/math/f09b8753197e4945aa2be43106138e6130ac4b43.png" alt="\iff"/></li>
+<li><img class="math" src="../../_images/math/3e07d56df7a2cc16c6a0ed94cfa58a15270fc7e5.png" alt="(A' \vee D) \wedge (B' \vee D) \wedge A \rightarrow D"/>, by a generalization of (4) <img class="math" src="../../_images/math/f09b8753197e4945aa2be43106138e6130ac4b43.png" alt="\iff"/></li>
+<li><img class="math" src="../../_images/math/cc303e2233f24e72d6bd6d51d45cd5ee3ac753ce.png" alt="D \wedge (B' \vee D) \rightarrow D"/>, by (8), (1), and (2) <img class="math" src="../../_images/math/f09b8753197e4945aa2be43106138e6130ac4b43.png" alt="\iff"/></li>
+<li><img class="math" src="../../_images/math/5bbf0bd0cf733211a4c19adeade6290d57e4372d.png" alt="D \rightarrow D"/>, by (22) and (1) <img class="math" src="../../_images/math/f09b8753197e4945aa2be43106138e6130ac4b43.png" alt="\iff"/></li>
+<li><img class="math" src="../../_images/math/a8dd8271856b14c0572bb40d7e6333c4ae9ff2c9.png" alt="D' \vee D"/>, by (7) <img class="math" src="../../_images/math/f09b8753197e4945aa2be43106138e6130ac4b43.png" alt="\iff"/></li>
+<li><img class="math" src="../../_images/math/4818a000d325810962aad5b675b9061997794a0b.png" alt="True"/>, by (10)</li>
+<li><img class="math" src="../../_images/math/0558323bdd8def76c8a9a539899a511514f042c1.png" alt="\Box"/></li>
+</ul>
+</div></blockquote>
+<p>The proof above deserves some comments to describe how it was done. There are a large number of provided equivalences and inference rules, so just how did we decide which ones to use? First, you must remember the rules of precedence to correctly understand what is being asked.</p>
+<blockquote>
+<div><ul class="simple">
+<li>Implication has the lowest precedence.</li>
+<li>This is followed by disjunction, or the <em>or</em> operator.</li>
+<li>Next, is the conjunction or <em>and</em> operator.</li>
+<li>Finally, the negation operator has the highest precedence.</li>
+</ul>
+</div></blockquote>
+<p>In the statement above the last implication operator is the top-level logical operator. So we are trying to prove that everything on the left implies <img class="math" src="../../_images/math/3cf5aa5abe312e6fd4996975341a43aa566e8d8d.png" alt="D"/>.</p>
+<p>Next, we went about removing implication so that we ended up with a conjunction of disjunctions with negation on individual variables in the antecedent. A conjunction of disjunctions with negation on individual variables is called <em>conjunctive normal form</em>. Every propositional logic expression can be reduced to conjunctive normal form. That is what the term <em>normal form</em> means. Every expression can be reduced to a normal form if a normal form exists for a language. In conjunctive normal form we end up with a series of disjunctions all <em>anded</em> together. In this proof we only reduced the antecedent to conjunctive normal form. We didn’t bother reducing the entire statement to conjunctive normal form right away.</p>
+<p>Finally, resolution (i.e. rule 26) was used to eliminate some variables while simplification and absorption eliminated others. DeMorgan’s law was useful in moving the negation down to the individual propositional variables.</p>
+<p>When we reach the final value of true we have proved that the propositional statement is true no matter what truth-values are applied to the individual variables. In other words, the statement is valid or a <em>tautology</em>. It is true independent of any assignment of true and false to the propositional variables. The final box at the end states that the proof is complete.</p>
+</div>
+<div class="section" id="proof-by-contradiction">
+<h3>1.1.6. Proof by Contradiction<a class="headerlink" href="#proof-by-contradiction" title="Permalink to this headline">¶</a></h3>
+<p>Another means of proving something is called a proof by contradiction. To prove by contradiction we start by assuming that the statement is false. Then we try to prove that we arrive at a contradiction where a propositional variable must be both true and false at the same time in some interpretation of the propositional variables.</p>
+<p>Consider the example that we just proved was true. Let’s prove it by contradiction instead. So, we’ll assume that the statement is false. Then we’ll show that we arrive at a contradiction.</p>
+<blockquote>
+<div><ul class="simple">
+<li>We start with the negated statement,</li>
+<li><img class="math" src="../../_images/math/74f7815f34bb2c03313fee4593659bdf6e0311eb.png" alt="([(A \vee B) \rightarrow C] \wedge (C \rightarrow D) \wedge A \rightarrow D)'"/> <img class="math" src="../../_images/math/f09b8753197e4945aa2be43106138e6130ac4b43.png" alt="\iff"/></li>
+<li><img class="math" src="../../_images/math/d6f4bf2ff6fdce29b9aefadd7dfe4d7cc1899739.png" alt="([(A \vee B) \rightarrow C] \wedge (C \rightarrow D) \wedge A)' \vee D)'"/> , by (7) <img class="math" src="../../_images/math/f09b8753197e4945aa2be43106138e6130ac4b43.png" alt="\iff"/></li>
+<li><img class="math" src="../../_images/math/f2411a79fe56f686d88e7baa87172f7eb8f24789.png" alt="([(A \vee B) \rightarrow C] \wedge (C \rightarrow D) \wedge A) \wedge D'"/>, by (19) <img class="math" src="../../_images/math/f09b8753197e4945aa2be43106138e6130ac4b43.png" alt="\iff"/></li>
+<li><img class="math" src="../../_images/math/f0cdec8c9ac182810cbe96fd02a48d847de22d3e.png" alt="[(A \vee B) \rightarrow C] \wedge (C \rightarrow D) \wedge A \wedge D'"/>, generalization of (4) <img class="math" src="../../_images/math/f09b8753197e4945aa2be43106138e6130ac4b43.png" alt="\iff"/></li>
+<li><img class="math" src="../../_images/math/a8eaa5bfdb6be7ad0a8dff9aba7c99491008ba8b.png" alt="[(A \vee B) \rightarrow C] \wedge (C \rightarrow D) \wedge (A \vee B) \wedge D'"/>, by (21) <img class="math" src="../../_images/math/f09b8753197e4945aa2be43106138e6130ac4b43.png" alt="\iff"/></li>
+<li><img class="math" src="../../_images/math/217d4eedb975b7b525766bb4ada78e1435435b25.png" alt="C \wedge (C \rightarrow D) \wedge D'"/>, by (2) and (24) <img class="math" src="../../_images/math/f09b8753197e4945aa2be43106138e6130ac4b43.png" alt="\iff"/></li>
+<li><img class="math" src="../../_images/math/6f1ffbba37a502afd24f9eacdc99471a7b6439b6.png" alt="D  \wedge D'"/>, by (24)</li>
+<li><img class="math" src="../../_images/math/fe0abe50faa39fbffcd9b960342d4174961328ad.png" alt="False"/>, by (9)</li>
+<li><img class="math" src="../../_images/math/0558323bdd8def76c8a9a539899a511514f042c1.png" alt="\Box"/></li>
+</ul>
+</div></blockquote>
+<p>Since we arrived at false, that says that or original statement was false and therefore the negation of it, the thing we assumed was false in our proof by contradiction, was actually true.</p>
+<p>In general, when proving something by contradiction you make an assumption that you believe to be false, then you go about showing that it is indeed false. Then the opposite of what you first assumed is actually true. This type of proof can be especially useful since you only have to find one counter-example to be able to conclude that your assumption could not be true and conclude that what you originally wanted to prove is true. In the next section we’ll do another proof by contradiction.</p>
+</div>
+<div class="section" id="other-proof-techniques">
+<h3>1.1.7. Other Proof techniques<a class="headerlink" href="#other-proof-techniques" title="Permalink to this headline">¶</a></h3>
+<p>Read pages 10-13 for more about proofs including induction and another example of proof by contradiction.</p>
+</div>
+<div class="section" id="exercises">
+<h3>1.1.8. Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h3>
+<p>These exercises help you practice using the concepts that were covered in this section.</p>
+<blockquote>
+<div><p>Construct a truth-table to prove the following tautologies are valid.</p>
+<ol class="arabic simple">
+<li><img class="math" src="../../_images/math/d8735ccfc43a9c1b927852486048cd9371c692bb.png" alt="(A \vee B)' \iff A' \wedge B'"/></li>
+<li><img class="math" src="../../_images/math/a6312047dbd45fb5970b64262faf47c5add40c8d.png" alt="(A \wedge B)' \iff A' \vee B'"/></li>
+<li><img class="math" src="../../_images/math/3d51ad21add905c844690b8c7744bb50aea7d4a4.png" alt="A \leftrightarrow B \iff (A \rightarrow B) \wedge (B \rightarrow A)"/></li>
+<li><img class="math" src="../../_images/math/1535d40a7e0beafba21afe9d207d4e3c08b8fa57.png" alt="A \vee (A \wedge B) \iff A"/></li>
+<li><img class="math" src="../../_images/math/4324e7328050c972b839352c7986208d0dd84493.png" alt="A \wedge (A \vee B) \iff A"/></li>
+<li><img class="math" src="../../_images/math/fe605cf69d42079d56d6230d22193751ea6a8865.png" alt="(A\rightarrow B) \iff (A' \vee B)"/></li>
+</ol>
+<p>Prove the following are true in any interpretation using the equivalence and inference rules in this section. Be sure to use one and only one rule per line in your proof (with the exception of rules 1-4) and include the rule number of each rule you used in your proof with the line where it was used as shown in the examples in the text.</p>
+<ol class="arabic simple" start="7">
+<li><img class="math" src="../../_images/math/8375822c014b2ea7686f2a6f7dfa2446b2ab2721.png" alt="A \wedge (B \rightarrow C) \rightarrow (B \rightarrow (A \wedge C))"/></li>
+<li><img class="math" src="../../_images/math/c5c1752d35776788207b3881546f3f1ebd20072e.png" alt="[A \rightarrow (B \vee C)] \wedge B' \wedge C' \rightarrow A'"/></li>
+<li><img class="math" src="../../_images/math/82de28e43b6e6b9af88db43ffa9111590eb06e47.png" alt="A' \wedge (B \rightarrow A) \rightarrow B'"/></li>
+<li><img class="math" src="../../_images/math/6b546695f2acec81779dcdf52ccace5cd2340c79.png" alt="(A \wedge B) \rightarrow (A \rightarrow B')'"/></li>
+<li><img class="math" src="../../_images/math/a3cbf6ace819c47da8f80ef318c945c899e2178b.png" alt="[A \rightarrow (B \rightarrow C)] \rightarrow [B \rightarrow (A \rightarrow C)]"/></li>
+<li><img class="math" src="../../_images/math/45ee007d1f0d6af5dfc8e5a971d2f096ff4d4954.png" alt="(A' \rightarrow B') \wedge B \wedge (A \rightarrow C) \rightarrow C"/></li>
+</ol>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="sets">
+<h2>1.2. Sets<a class="headerlink" href="#sets" title="Permalink to this headline">¶</a></h2>
+<div class="figboxright docutils container">
+<div class="figure" id="id3">
+<span id="setfig1"></span><img alt="../../_images/subset.png" src="../../_images/subset.png" />
+<p class="caption"><span class="caption-text">A Subset and a Superset</span></p>
+</div>
+</div>
+<p>This section supplements material found in the short section 1.1 of Linz’s text. You should read through that material on pages 3-6 if the fifth edition. Then supplement it with the material written here.</p>
+<p>A <em>set</em> is a collection of items. There are very few restrictions on sets. They do not need to contain the same type of items. The order that the items are written in a set does not matter. So the set {1,2,3,4} is the same as the set {2,1,4,3}. In fact, a set does not need to contain any items. In this case it would be the <em>empty set</em>. A set may contain a finite number of items, or elements, or an infinite number of elements. The set of cars you have owned in your life is a finite set. It may even be the <em>empty set</em> right now. The set of integers is an infinite set.</p>
+<p>A <em>subset</em> is also a <em>set</em> but describes a relationship between two sets. The set <em>A</em> is a subset of <em>B</em> if every element in <em>A</em> is also in <em>B</em>. We can write this mathematically as follows.</p>
+<blockquote>
+<div><img class="math" src="../../_images/math/17e66b6211150ef463b226d13124d7546e8920ea.png" alt="A \subseteq B \iff \forall a \in A, a \in B"/></div></blockquote>
+<p>The <img class="math" src="../../_images/math/a6edb153454647ff8639d1201865d2e96e498a9c.png" alt="\subseteq"/> symbol denotes subset containment. The potentially smaller set, <img class="math" src="../../_images/math/0043fe6507e9b1d112e07a2801e24927e267dd50.png" alt="A"/>, is written on the left while the potentially bigger set, <img class="math" src="../../_images/math/9805f44feec6f81d376d09e88b8236635edbb3c8.png" alt="B"/>, is written on the right. The line below the horseshoe indicates that the two sets may be equal in size, in which case they would denote the same set. This is much the same as writing the <img class="math" src="../../_images/math/fdfcf5572a062056a851608b3dc672bca6598c46.png" alt="\leq"/> symbol to denote a number that may be less than or equal to another in an ordering of the numbers. A subset that is not equal to its <em>superset</em> is called a <em>proper subset</em> which is written as follows.</p>
+<blockquote>
+<div><img class="math" src="../../_images/math/8fc4b94755204bdebd7f511ccbadfae426e25f94.png" alt="A \subset B \iff \forall a \in A, a \in B ~and~ \exists b \in B \ni b \notin A"/></div></blockquote>
+<p>This is read as <img class="math" src="../../_images/math/0043fe6507e9b1d112e07a2801e24927e267dd50.png" alt="A"/> is a proper subset of <img class="math" src="../../_images/math/9805f44feec6f81d376d09e88b8236635edbb3c8.png" alt="B"/> if and only if for all <img class="math" src="../../_images/math/bd9d9c7512c898e0a254a0882184197bc1bd9c9f.png" alt="a"/> in <img class="math" src="../../_images/math/0043fe6507e9b1d112e07a2801e24927e267dd50.png" alt="A"/>, <img class="math" src="../../_images/math/bd9d9c7512c898e0a254a0882184197bc1bd9c9f.png" alt="a"/> is also in <img class="math" src="../../_images/math/9805f44feec6f81d376d09e88b8236635edbb3c8.png" alt="B"/> and there exists at least one <img class="math" src="../../_images/math/57c9d14bb082716df9000146882ce365335d08f1.png" alt="b"/> that is in <img class="math" src="../../_images/math/9805f44feec6f81d376d09e88b8236635edbb3c8.png" alt="B"/> such that <img class="math" src="../../_images/math/57c9d14bb082716df9000146882ce365335d08f1.png" alt="b"/> is not in <img class="math" src="../../_images/math/0043fe6507e9b1d112e07a2801e24927e267dd50.png" alt="A"/>. Figure 1 depicts <img class="math" src="../../_images/math/0043fe6507e9b1d112e07a2801e24927e267dd50.png" alt="A"/> as a proper subset of <img class="math" src="../../_images/math/9805f44feec6f81d376d09e88b8236635edbb3c8.png" alt="B"/>.</p>
+<div class="figboxright docutils container">
+<div class="figure" id="id4">
+<span id="setfig2"></span><img alt="../../_images/sets.png" src="../../_images/sets.png" />
+<p class="caption"><span class="caption-text">A Set Diagram</span></p>
+</div>
+</div>
+<p>The picture of figure 1 is that of a <em>Venn Diagram</em>. Venn diagrams were first introduced by John Venn around 1880 to describe mathematical sets. The <em>universe</em> is typically not labelled but denotes the entire world of items that potentially might be a part of some set. Typically there are items that are not part of any set that we might be interested in describing. The area inside a circle denotes the items of that set. Since sets may overlap they may be drawn on top of each other or overlapping some part of the two sets.</p>
+<p>Figure 2 denotes two sets that overlap a little bit but not completely. The (American) football shaped area (i.e. region 4) that the two sets share is the <em>intersection</em> of the two sets. The <em>intersection</em> of two sets are those items that are present in both sets. The <em>union</em> of two sets are the items that are a part of either set. Regions 2, 3, and 4 of the Venn diagram in figure 2 are the union of sets A and B. The <em>complement</em> of a particular set are those items that are not inside the set. Regions 1 and 3 make up the complement of set A in figure 2. Complement, union, and intersection each have their own set operators as shown in this table. In addition, some common set operations are detailed there as well.</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="33%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Operator Name</th>
+<th class="head">Symbolic Representation</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Subset</td>
+<td><img class="math" src="../../_images/math/9d13389de981460c2ee93b47b637909333129906.png" alt="A \subseteq B"/></td>
+<td>True if <img class="math" src="../../_images/math/0043fe6507e9b1d112e07a2801e24927e267dd50.png" alt="A"/> is inside <img class="math" src="../../_images/math/9805f44feec6f81d376d09e88b8236635edbb3c8.png" alt="B"/> (see figure 1)</td>
+</tr>
+<tr class="row-odd"><td>Proper Subset</td>
+<td><img class="math" src="../../_images/math/56b623c9c4633221484c9e7c5c6350596f5679a6.png" alt="A \subset B"/></td>
+<td>True if <img class="math" src="../../_images/math/0043fe6507e9b1d112e07a2801e24927e267dd50.png" alt="A"/> is a subset of <img class="math" src="../../_images/math/9805f44feec6f81d376d09e88b8236635edbb3c8.png" alt="B"/> and <img class="math" src="../../_images/math/c764d5b001d92163baad98491aa1edbcfe0277a6.png" alt="A \neq B"/></td>
+</tr>
+<tr class="row-even"><td>Superset</td>
+<td><img class="math" src="../../_images/math/4b92d994e2f43eb7310e82e18c1cf4017dfe3f99.png" alt="B \supseteq A"/></td>
+<td>True if <img class="math" src="../../_images/math/9805f44feec6f81d376d09e88b8236635edbb3c8.png" alt="B"/> is a superset of <img class="math" src="../../_images/math/0043fe6507e9b1d112e07a2801e24927e267dd50.png" alt="A"/>.</td>
+</tr>
+<tr class="row-odd"><td>Proper Superset</td>
+<td><img class="math" src="../../_images/math/ee1f2760c1c1fc1058dba18b112127d7d55f227f.png" alt="B \supset A"/></td>
+<td>True if <img class="math" src="../../_images/math/9805f44feec6f81d376d09e88b8236635edbb3c8.png" alt="B"/> is a superset of <img class="math" src="../../_images/math/0043fe6507e9b1d112e07a2801e24927e267dd50.png" alt="A"/> and <img class="math" src="../../_images/math/c764d5b001d92163baad98491aa1edbcfe0277a6.png" alt="A \neq B"/></td>
+</tr>
+<tr class="row-even"><td>Union</td>
+<td><img class="math" src="../../_images/math/6973b892f85de80933289d4276ddb95db864db86.png" alt="A \cup B"/></td>
+<td>Regions 2,3,4 of figure 2</td>
+</tr>
+<tr class="row-odd"><td>Intersection</td>
+<td><img class="math" src="../../_images/math/d187de702a2a01b407de80b2b1c2120161671df6.png" alt="A \cap B"/></td>
+<td>Region 4 of figure 2</td>
+</tr>
+<tr class="row-even"><td>Complement</td>
+<td><img class="math" src="../../_images/math/79b0cb74e5e8c6819bb5098d25348548f1b351a1.png" alt="\bar{A}"/></td>
+<td>Regions 1,3 of figure 2</td>
+</tr>
+<tr class="row-odd"><td>Set Difference</td>
+<td><img class="math" src="../../_images/math/a036fa1d3eccd55e311bbf754a37ae7e45dd29e3.png" alt="A - B"/></td>
+<td>Region 2 of figure 2</td>
+</tr>
+<tr class="row-even"><td>Set Addition</td>
+<td><img class="math" src="../../_images/math/fb877f5192193a709aed5a3f51cc7fd2a81718ae.png" alt="A + B"/></td>
+<td>Regions 2,3,4  (same as union)</td>
+</tr>
+<tr class="row-odd"><td>Set Cardinality</td>
+<td>denoted by <img class="math" src="../../_images/math/3fd25c7b74eefe16a7cd09c8d1a630634f1dd53c.png" alt="\arrowvert A \arrowvert"/></td>
+<td>Number of items in <img class="math" src="../../_images/math/0043fe6507e9b1d112e07a2801e24927e267dd50.png" alt="A"/>.</td>
+</tr>
+<tr class="row-even"><td>Set Membership</td>
+<td><img class="math" src="../../_images/math/e6a277f88d255e7740eff02154f8efd4ef788263.png" alt="a \in A"/></td>
+<td>True if <img class="math" src="../../_images/math/bd9d9c7512c898e0a254a0882184197bc1bd9c9f.png" alt="a"/> is in <img class="math" src="../../_images/math/0043fe6507e9b1d112e07a2801e24927e267dd50.png" alt="A"/></td>
+</tr>
+<tr class="row-odd"><td>Symmetric Difference</td>
+<td><img class="math" src="../../_images/math/efb08bb90c48936ab12c60dc5663978cc92f90c0.png" alt="A \ominus B"/></td>
+<td>Same as <img class="math" src="../../_images/math/216cc081d9771538e531e157a4474712254fad4a.png" alt="(A-B) \cup (B-A)"/></td>
+</tr>
+<tr class="row-even"><td>Cross Product</td>
+<td><img class="math" src="../../_images/math/1a885330f1823f1fddce44f1c8d23ac7cb3ccb55.png" alt="A \times B"/></td>
+<td>Constructs a new set. Described below.</td>
+</tr>
+<tr class="row-odd"><td>Power Set</td>
+<td><img class="math" src="../../_images/math/294185022bd53d3d09e0eadf5e8ce00ccf982927.png" alt="2^A"/></td>
+<td>Constructs a new set. Described below.</td>
+</tr>
+<tr class="row-even"><td>Empty Set</td>
+<td><img class="math" src="../../_images/math/4cff6a131bdb497b2e2f5caccff885ab996cc33e.png" alt="\emptyset"/></td>
+<td>The set with no items. Sometimes denoted {}.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>The cross product of two sets is a new set that consists of all the pairs of items from the two constituent sets. Consider set A = {1,2,3,4} and B = {“hi”, “there”}. Then A X B = {(1,”hi”), (2,”hi”), (3,”hi”), (4,”hi”), (1,”there”), (2,”there”), (3,”there”), (4,”there”)}. From this description it should be clear that the cardinality of any finite cross product is <img class="math" src="../../_images/math/9e01e68c74df3b7c78d29eadd6d9364d336914c4.png" alt="\arrowvert A \times B \arrowvert = \arrowvert A \arrowvert * \arrowvert B \arrowvert"/>.</p>
+<p>The power set of a set is the set of all subsets. So <img class="math" src="../../_images/math/294185022bd53d3d09e0eadf5e8ce00ccf982927.png" alt="2^A"/> is the set of all subsets of A. If A={1,2,3,4}, then</p>
+<blockquote>
+<div><img class="math" src="../../_images/math/294185022bd53d3d09e0eadf5e8ce00ccf982927.png" alt="2^A"/> = { <img class="math" src="../../_images/math/4cff6a131bdb497b2e2f5caccff885ab996cc33e.png" alt="\emptyset"/>, {1}, {2}, {3}, {4}, {1,2}, {1,3}, {1,4}, {2,3}, {2,4}, {3,4}, {1,2,3}, {1,2,4}, {1,3,4}, {2,3,4}, {1,2,3,4}}</div></blockquote>
+<p>For a finite set, the cardinality of its powerset can be computed as <img class="math" src="../../_images/math/1fdd8e519ebc09e9cdb6f5a895652089b7a127a0.png" alt="\arrowvert 2^A \arrowvert = 2 ^ {\arrowvert A \arrowvert}"/>. Notice that the empty set is always a member of any power set.</p>
+<p>Sets come into play in many algorithms in Computer Science. Because of their importance, sets have been implemented in pretty much all programming languages. For instance, <a class="reference external" href="https://docs.python.org/3.4/library/stdtypes.html#set-types-set-frozenset">Python has an implementation of the set datatype</a>. In fact, there are two implementations of sets within Python, the <em>frozenset</em> and the <em>set</em> datatypes. The <em>frozenset</em> implementation provides an immutable set type. Immutable datatypes are values that once created cannot be changed. Mutable datatypes can be altered (i.e. mutated) after they are created. The <em>set</em> datatype is mutable. You can read about the methods supported by these datatypes on the help webpage linked above. The operations supported by these datatype mirror the operations outlined in the table in this section.</p>
+<p>Both the <em>set</em> and <em>frozenset</em> datatypes of Python implement the set membership test in O(1) time complexity meaning they can look to see if an item is in a set in a constant amount of time, independent of the set’s size. Other set operations are dependent on the size of the set or sets involved in the operation. Sets are commonly implemented using a hash table which means that the items of a set must be hashable. Most data items in Python are hashable. If you wish to implement your own hashing function for a class you implement the __hash__ method. It must return a evenly distributed integer value as its result.</p>
+<div class="section" id="id1">
+<h3>1.2.1. Exercises<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Complete the following exercises involving sets.</p>
+<blockquote>
+<div><ol class="arabic simple" start="13">
+<li>Provide the region numbers of the Venn diagram from fig. 2 that are included in the set <img class="math" src="../../_images/math/2d4468f23de2543e1ca5cc8ea618a5d8f8e1af36.png" alt="\overline{A \ominus B}"/>.</li>
+<li>Provide the region numbers of the Venn diagram from fig. 2 that are included in the set <img class="math" src="../../_images/math/0293b5b2e51510a6f2a2e292c194e09da43e330b.png" alt="(A - B) \cup A'"/>.</li>
+<li>If <img class="math" src="../../_images/math/046b845dd618864962365d0c540698a1649e5eea.png" alt="A=\{1,2,3\}"/> and <img class="math" src="../../_images/math/86fae645dedd4526d39d9125d6b020644f4dada1.png" alt="B=\{2,3,4\}"/>, then what are the items of the set <img class="math" src="../../_images/math/1a885330f1823f1fddce44f1c8d23ac7cb3ccb55.png" alt="A \times B"/>?</li>
+<li>If <img class="math" src="../../_images/math/8a572ab4926a4e4820670087b0422ff458dc5408.png" alt="A=\{a,b,c\}"/> and <img class="math" src="../../_images/math/ade939b2e4c3a85c2ad98f092c0dd0cb6b420125.png" alt="B=\{x,y,z\}"/> and the universe is the set of all lowercase letters, then what are the items of the set <img class="math" src="../../_images/math/0293b5b2e51510a6f2a2e292c194e09da43e330b.png" alt="(A - B) \cup A'"/>?</li>
+<li>Assume <img class="math" src="../../_images/math/8a572ab4926a4e4820670087b0422ff458dc5408.png" alt="A=\{a,b,c\}"/>. What is <img class="math" src="../../_images/math/f3a439637f20a36b8b3e7a926a2ce7b494f31c2b.png" alt="\arrowvert 2^A \arrowvert"/>? Provide the contents of the set.</li>
+<li>Consider the set <img class="math" src="../../_images/math/bb1be5ccc8be5373595a58924bddeaa268ea572a.png" alt="A = \{1,2,3,4\}"/>. Let <img class="math" src="../../_images/math/979cd58171360483da16d26b56a2c406df8eecbd.png" alt="C(S) = \bigcup_{i=1}^{\arrowvert S \arrowvert} \{e_i\} \in S"/>. In this case <img class="math" src="../../_images/math/df33d9972e2b5815c25ca9d9e04c888ce7d733bf.png" alt="C(A)"/> would be <img class="math" src="../../_images/math/24a2b561167e85ed8bab4a75b3298f1123e337fc.png" alt="\{\{1\},\{2\},\{3\},\{4\}\}"/>. What is <img class="math" src="../../_images/math/4489ab6442ac96c9b83297ec4c43e4d5cbc85112.png" alt="2^A - C(A)"/>? Provide a formula for computing <img class="math" src="../../_images/math/70636e8ef5dd838e4dc586f2c1795b6abd066751.png" alt="\arrowvert 2^A - C(A) \arrowvert"/> for any finite set.</li>
+</ol>
+</div></blockquote>
+</div>
+<div class="section" id="infinite-sets">
+<h3>1.2.2. Infinite Sets<a class="headerlink" href="#infinite-sets" title="Permalink to this headline">¶</a></h3>
+<p>The content provided here may be supplemented by this excellent <a class="reference external" href="http://legacy.earlham.edu/~peters/writing/infapp.htm">crash course provided by Peter Suber</a>.</p>
+<p>Some sets are infinite in size. For example, the set of integers, denoted by <img class="math" src="../../_images/math/bcb2457ac9d8995a4f34d57cadac7ecbbe58f3bd.png" alt="Z"/>, is an infinite set. We can count the items in that set, but we would never finish of course, so trying to determine its cardinality by counting would be futile. However, we can say that the set is countably infinite if we can find a method, called an <em>enumeration</em>, of counting all the integers. But, the integers contain both negative and positive numbers. How would we provide a method of counting them?</p>
+<p>It turns out we can provide that enumeration if we start at 0. Here is the enumeration that proves that the integers are countably infinite in size.</p>
+<blockquote>
+<div>0, -1, 1, -2, 2, -3, 3, -4, 4, …</div></blockquote>
+<p>By counting in this way we would be able to enumerate all integers given an infinite amount of time. So, now we know that while some sets are infinite, at least some of these infinite sets are countable. An infinite set that is countable is called a <em>denumerable</em> set.</p>
+<p>But, we have operators that we can use to construct new sets. What about <img class="math" src="../../_images/math/d1006c841dfdabaf3f3a08dd9c9d8d45189ce063.png" alt="N \times N"/> where <img class="math" src="../../_images/math/f4170ed8938b79490d8923857962695514a8e4cb.png" alt="N"/> is the set of natural numbers. The natural numbers are the set of non-negative integers. Is <img class="math" src="../../_images/math/d1006c841dfdabaf3f3a08dd9c9d8d45189ce063.png" alt="N \times N"/> a denumerable set? Clearly it is infinite, but can we come up with an enumeration that would let us count all the elements of <img class="math" src="../../_images/math/d1006c841dfdabaf3f3a08dd9c9d8d45189ce063.png" alt="N \times N"/>?</p>
+<p>The proof that <img class="math" src="../../_images/math/d1006c841dfdabaf3f3a08dd9c9d8d45189ce063.png" alt="N \times N"/> is countably infinite, or denumerable, is a little trickier. The proof relies on constructing a two-dimensional, infinite, grid as shown here.</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+<col width="10%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>&#160;</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>etc</td>
+</tr>
+<tr class="row-even"><td>0</td>
+<td>(0,0)</td>
+<td>(0,1)</td>
+<td>(0,2)</td>
+<td>(0,3)</td>
+<td>(0,4)</td>
+<td>(0,5)</td>
+<td>etc</td>
+</tr>
+<tr class="row-odd"><td>1</td>
+<td>(1,0)</td>
+<td>(1,1)</td>
+<td>(1,2)</td>
+<td>(1,3)</td>
+<td>(1,4)</td>
+<td>(1,5)</td>
+<td>etc</td>
+</tr>
+<tr class="row-even"><td>2</td>
+<td>(2,0)</td>
+<td>(2,1)</td>
+<td>(2,2)</td>
+<td>(2,3)</td>
+<td>(2,4)</td>
+<td>(2,5)</td>
+<td>etc</td>
+</tr>
+<tr class="row-odd"><td>3</td>
+<td>(3,0)</td>
+<td>(3,1)</td>
+<td>(3,2)</td>
+<td>(3,3)</td>
+<td>(3,4)</td>
+<td>(3,5)</td>
+<td>etc</td>
+</tr>
+<tr class="row-even"><td>4</td>
+<td>(4,0)</td>
+<td>(4,1)</td>
+<td>(4,2)</td>
+<td>(4,3)</td>
+<td>(4,4)</td>
+<td>(4,5)</td>
+<td>etc</td>
+</tr>
+<tr class="row-odd"><td>5</td>
+<td>(5,0)</td>
+<td>(5,1)</td>
+<td>(5,2)</td>
+<td>(5,3)</td>
+<td>(5,4)</td>
+<td>(5,5)</td>
+<td>etc</td>
+</tr>
+<tr class="row-even"><td>etc</td>
+<td>etc</td>
+<td>etc</td>
+<td>etc</td>
+<td>etc</td>
+<td>etc</td>
+<td>etc</td>
+<td>etc</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>Now, the problem is reduced to finding an enumeration that would eventually count all of them. We can’t proceed down a row or we would never get to the next row. Same with columns. We can’t proceed down a column or we would never get to the next one. So, we count the only way we can, by proceeding on diagonals that have a beginning and an end. Our enumeration proceeds as follows.</p>
+<blockquote>
+<div>(0,0), (1,0), (0,1), (2,0), (1,1), (0,2), (3,0), (2,1), (1,2), (0,3), (4,0), (3,1), (2,2), (1,3), (0,4), …</div></blockquote>
+<p>In this way we would eventually enumerate all the elements of <img class="math" src="../../_images/math/d1006c841dfdabaf3f3a08dd9c9d8d45189ce063.png" alt="N \times N"/>. So, the cross product of any denumerable set is also denumerable.
+Weird things begin to happen when you consider infinite sets. We can construct a function that will take any natural number, 0, 1, 2, 3, …, and give us a corresponding element from our enumeration of the integers. Here is that function:</p>
+<blockquote>
+<div><img class="math" src="../../_images/math/5811ec93fd32156ac640d7ad574e086f68c239e4.png" alt="f(n) = -1^n \times [(n+1)/2]"/></div></blockquote>
+<p>Likewise, we can construct a function that will take any integer and give us a corresponding natural number. Any non-negative integer will map to a corresponding even natural number, while any negative integer would map to an odd natural number. The definition of this second function proves that the set of integers is no bigger than the set of natural numbers. If the set of integers were bigger, then there would be some integer that didn’t have a corresponding natural number. But the function definition shows us that every integer has a corresponding natural number.</p>
+<p>The previous function shows us that every natural number has a corresponding integer. This is the converse of the argument that every integer has a corresponding natural number. With these two functions the set of integers and the set of natural numbers are put in one-to-one correspondence to each other. This is usually written as <img class="math" src="../../_images/math/af46d65b39d96709deb4890a73d3dc12d13c600b.png" alt="Z \simeq N"/>. What we just proved is that the integers and the naturals are the same size set. It turns out that the cross product of the natural numbers is the same size set as well. They are all denumerable or countably infinite. The integers, naturals, and cross-product of the naturals have exactly the same size.</p>
+<p>This goes against intuitive thinking. It just doesn’t seem that a set like the integers can be the same size as the set of naturals since the naturals only have 1/2 the integers as part of them. But, we are dealing with sets of infinite size and that means that intuition is not always right.</p>
+<p>Then what about the set of real numbers? Are they countably infinite? Intuition would say that they are not, but is intuition trust-worthy when dealing with infinite sets? It turns out that the real numbers are not countably infinite. Here is the proof. It is a classic proof by contradiction.</p>
+<blockquote>
+<div><p>Are the real numbers countably infinite?</p>
+<p><strong>Proof:</strong></p>
+<p>Assume that the reals were countably infinite. Then there must be some enumeration of all the real numbers. We’ll line all the numbers up in a list. To keep things simple, we’ll consider only the numbers between 0 and 1.</p>
+<p>Now we’ll construct a new number that is not in that list of all numbers between 0 and 1. We’ll start with “0.” and construct the numbers after the decimal point.</p>
+<p>Look at the first number in our list of numbers. We’ll pick the first digit of our new number that does not equal the first digit after the decimal point of the first number in our enumeration. Then, we pick the second digit of our new number that does not match the digit of the second number in our enumeration. We continue in this fashion infinitely picking the next digit in our number as we proceed. To see how this works, consider this example enumeration.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><img class="math" src="../../_images/math/7a0896f447fdec066d2b74af3c5e02b45949d3f4.png" alt="0.\underline{0}309..."/></li>
+<li><img class="math" src="../../_images/math/873b329b4efc6a97f2cbe4cfbefe47f9fa113289.png" alt="0.1\underline{5}48..."/></li>
+<li><img class="math" src="../../_images/math/f93b41cb98b45520a357cd5c69e5f2b43c05b945.png" alt="0.18\underline{7}9..."/></li>
+<li><img class="math" src="../../_images/math/45b09f6bb410c5a488c3f83abdd93d1c4c864ee0.png" alt="0.952\underline{8}..."/></li>
+<li>etc.</li>
+</ol>
+</div></blockquote>
+<p>So, in this example our new number looks something like <img class="math" src="../../_images/math/ab6db779a54e5030deb786b48be8849eecbbf690.png" alt="0.5497..."/>. Clearly there are lots of choices for the digits of this number.
+This new number that we just built cannot be in our enumeration of all the real numbers between 1 and 0, yet it is a number between 1 and 0. It cannot be the first number, because it differs in the first digit after the decimal point from that number. It cannot be the second number because it differs from it in the second digit after the decimal point. This same argument applies to all digits in the newly constructed real number.</p>
+<p>So our assumption that the real numbers between 0 and 1 was countably infinite must be wrong. Therefore, the numbers between 0 and 1 are uncountably infinite. And, since the real numbers are clearly a superset of the real numbers between 0 and 1, the real numbers are uncountably infinite as well. <img class="math" src="../../_images/math/0558323bdd8def76c8a9a539899a511514f042c1.png" alt="\Box"/></p>
+</div></blockquote>
+<p>So, the real numbers are uncountably infinite. Are there other sets that are uncountably infinite? Yes, it turns out that <img class="math" src="../../_images/math/294185022bd53d3d09e0eadf5e8ce00ccf982927.png" alt="2^A"/> is an uncountably infinite set if <img class="math" src="../../_images/math/0043fe6507e9b1d112e07a2801e24927e267dd50.png" alt="A"/> is countably infinite. The cardinality of the set of reals is the same as the cardinality of the power set of a countably infinite set.</p>
+<p>It turns out the cardinality of the interval (0, 1), the cardinality of the real numbers, and the cardinality of the power set of any denumerable set are all the same. They are all uncountable and their cardinality is denoted as <img class="math" src="../../_images/math/edb88eaba30348007b1f168211cf3767516c4399.png" alt="\varsigma = \arrowvert 2^N \arrowvert"/> where <img class="math" src="../../_images/math/f4170ed8938b79490d8923857962695514a8e4cb.png" alt="N"/> represents the naturals.</p>
+</div>
+<div class="section" id="id2">
+<h3>1.2.3. Exercises<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>Provide answers for the following exercises.</p>
+<blockquote>
+<div><ol class="arabic simple" start="19">
+<li>Prove that the set of Rational numbers is denumerable. Don’t look this up on the internet. Try it for yourself to see if you can come up with the proper argument.</li>
+<li>For any uncountably infinite set, can you come up with a set that would have greater cardinality? Again, try to do this without the internet. You have enough information here to find your answer.</li>
+<li>Prove that removing one element from a denumerable set still results in a denumerable set.</li>
+<li>Prove that the set of odd natural numbers is denumerable by putting them in 1-1 correspondence with another denumerable set.</li>
+<li>Prove that the set of all finite length strings of 0 and 1 is denumerable.</li>
+<li>Prove that the set of all finite length strings of 0 is denumerable.</li>
+<li>Prove that the union of two denumerable sets is still denumerable.</li>
+<li>Prove that the set of irrational numbers is uncountable. The irrational numbers are those numbers that cannot be represented as A/B where A and B are integers.</li>
+</ol>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="functions-and-relations">
+<h2>1.3. Functions and Relations<a class="headerlink" href="#functions-and-relations" title="Permalink to this headline">¶</a></h2>
+<p>See pages 6-8 of Linz’s text, fifth edition.</p>
+</div>
+<div class="section" id="graphs-and-trees">
+<h2>1.4. Graphs and Trees<a class="headerlink" href="#graphs-and-trees" title="Permalink to this headline">¶</a></h2>
+<p>See pages 8-10 of Linz’s text, fifth edition.</p>
+</div>
+<div class="section" id="three-basic-concepts">
+<h2>1.5. Three Basic Concepts<a class="headerlink" href="#three-basic-concepts" title="Permalink to this headline">¶</a></h2>
+<p>Read pages 16-27 of chapter 1, fifth edition on the three basic concepts of languages, grammars, and automata.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Computational Models  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Kent D. Lee.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.
+    </div>
+  </body>
+</html>

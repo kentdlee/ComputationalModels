@@ -1,0 +1,313 @@
+The NFA CREATED FOR THE REGULAR EXPRESSIONS IS:
+
+The start state is: 0
+
+STATE           ON CLASS         GO TO     ACCEPTS
+-----           --------         -----     -------
+    0
+                     EPSILON        11
+                     EPSILON        19
+                     EPSILON        21
+                     EPSILON        24
+                     EPSILON        27
+                     EPSILON        30
+                     EPSILON        33
+                     EPSILON        35
+                     EPSILON        37
+                     EPSILON        39
+                     EPSILON        41
+                     EPSILON        43
+                     EPSILON        45
+                     EPSILON        47
+                     EPSILON        49
+                     EPSILON        51
+                     EPSILON        53
+                     EPSILON        55
+                     EPSILON        57
+                     EPSILON        59
+                     EPSILON        61
+                     EPSILON        87
+                     EPSILON        95
+                     EPSILON        97
+
+    1
+                      letter         2
+
+    2
+                     EPSILON         9
+
+    3
+                      letter         4
+
+    4
+                     EPSILON         8
+
+    5
+                       digit         6
+
+    6
+                     EPSILON         8
+
+    7
+                     EPSILON         3
+                     EPSILON         5
+
+    8
+                     EPSILON        10
+
+    9
+                     EPSILON         7
+                     EPSILON        10
+
+   10
+                     EPSILON         9
+                     EPSILON        12
+
+   11
+                     EPSILON         1
+
+   12                                   identifier
+
+   13
+                       digit        14
+
+   14
+                     EPSILON        17
+
+   15
+                       digit        16
+
+   16
+                     EPSILON        18
+
+   17
+                     EPSILON        15
+                     EPSILON        18
+
+   18
+                     EPSILON        17
+                     EPSILON        20
+
+   19
+                     EPSILON        13
+
+   20                                      integer
+
+   21
+                           >        22
+
+   22
+                           =        23
+
+   23                                           >=
+
+   24
+                           <        25
+
+   25
+                           =        26
+
+   26                                           <=
+
+   27
+                           =        28
+
+   28
+                           =        29
+
+   29                                           ==
+
+   30
+                           !        31
+
+   31
+                           =        32
+
+   32                                           !=
+
+   33
+                           >        34
+
+   34                                            >
+
+   35
+                           <        36
+
+   36                                            <
+
+   37
+                           =        38
+
+   38                                            =
+
+   39
+                           (        40
+
+   40                                            (
+
+   41
+                           )        42
+
+   42                                            )
+
+   43
+                           +        44
+
+   44                                            +
+
+   45
+                           -        46
+
+   46                                            -
+
+   47
+                           *        48
+
+   48                                            *
+
+   49
+                           /        50
+
+   50                                            /
+
+   51
+                           [        52
+
+   52                                            [
+
+   53
+                           ]        54
+
+   54                                            ]
+
+   55
+                           {        56
+
+   56                                            {
+
+   57
+                           }        58
+
+   58                                            }
+
+   59
+                           ,        60
+
+   60                                            ,
+
+   61
+                           ;        62
+
+   62                                            ;
+
+   63
+                       quote        64
+
+   64
+                     EPSILON        67
+
+   65
+             anycharbutquote        66
+
+   66
+                     EPSILON        68
+
+   67
+                     EPSILON        65
+                     EPSILON        68
+
+   68
+                     EPSILON        67
+                     EPSILON        70
+
+   69
+                     EPSILON        63
+
+   70
+                     EPSILON        71
+
+   71
+                       quote        72
+
+   72
+                     EPSILON        74
+
+   73
+                     EPSILON        69
+
+   74
+                     EPSILON        88
+
+   75
+                 doublequote        76
+
+   76
+                     EPSILON        79
+
+   77
+       anycharbutdoublequote        78
+
+   78
+                     EPSILON        80
+
+   79
+                     EPSILON        77
+                     EPSILON        80
+
+   80
+                     EPSILON        79
+                     EPSILON        82
+
+   81
+                     EPSILON        75
+
+   82
+                     EPSILON        83
+
+   83
+                 doublequote        84
+
+   84
+                     EPSILON        86
+
+   85
+                     EPSILON        81
+
+   86
+                     EPSILON        88
+
+   87
+                     EPSILON        73
+                     EPSILON        85
+
+   88                                  stringconst
+
+   89
+                       pound        90
+
+   90
+                     EPSILON        93
+
+   91
+           anycharbutnewline        92
+
+   92
+                     EPSILON        94
+
+   93
+                     EPSILON        91
+                     EPSILON        94
+
+   94
+                     EPSILON        93
+                     EPSILON        96
+
+   95
+                     EPSILON        89
+
+   96                                      comment
+
+   97
+                         EOF        98
+
+   98                                    endoffile

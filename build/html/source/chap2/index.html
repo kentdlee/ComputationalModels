@@ -1,0 +1,3300 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>2. Finite Automata &#8212; Computational Models  documentation</title>
+    <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Computational Models  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">2. Finite Automata</a><ul>
+<li><a class="reference internal" href="#the-ordered-collections">2.1. The Ordered Collections</a></li>
+<li><a class="reference internal" href="#the-state-class">2.2. The State Class</a></li>
+<li><a class="reference internal" href="#jpython-programming-language-example">2.3. JPython Programming Language Example</a></li>
+<li><a class="reference internal" href="#the-streamreader-class">2.4. The StreamReader Class</a></li>
+<li><a class="reference internal" href="#an-nfa-example">2.5. An NFA Example</a></li>
+<li><a class="reference internal" href="#a-scangen-input-file">2.6. A Scangen Input File</a></li>
+<li><a class="reference internal" href="#nfa-to-dfa-conversion">2.7. NFA to DFA Conversion</a><ul>
+<li><a class="reference internal" href="#the-function">2.7.1. The <img class="math" src="../../_images/math/8925a21857ac06f81d437f2ee13512287622530b.png" alt="\epsilon Closure"/> Function</a></li>
+<li><a class="reference internal" href="#the-nfa-to-dfa-algorithm">2.7.2. The NFA to DFA Algorithm</a></li>
+<li><a class="reference internal" href="#example-calculator-language">2.7.3. Example Calculator Language</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dfa-minimization">2.8. DFA Minimization</a><ul>
+<li><a class="reference internal" href="#the-finer-function">2.8.1. The Finer Function</a></li>
+<li><a class="reference internal" href="#example-minimal-dfa">2.8.2. Example Minimal DFA</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#regular-expressions-to-nfas">2.9. Regular Expressions To NFAs</a><ul>
+<li><a class="reference internal" href="#the-algorithm">2.9.1. The Algorithm</a></li>
+<li><a class="reference internal" href="#the-operate-function">2.9.2. The Operate Function</a></li>
+<li><a class="reference internal" href="#reading-the-input">2.9.3. Reading the Input</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#programming-exercises">2.10. Programming Exercises</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/source/chap2/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="finite-automata">
+<h1>2. Finite Automata<a class="headerlink" href="#finite-automata" title="Permalink to this headline">¶</a></h1>
+<p>Read all of chapter 2 from Peter Linz’s text, “Formal Languages and Automata”, fifth edition.</p>
+<div class="section" id="the-ordered-collections">
+<h2>2.1. The Ordered Collections<a class="headerlink" href="#the-ordered-collections" title="Permalink to this headline">¶</a></h2>
+<p>Many of the programs you will write in this course require you to use sets and maps (i.e. dictionaries). As of Python 3.3 the built-in set and dictionary types non-deterministically iterate over their items. None of the algorithms presented here rely on the ordering of items within a set or a dictionary. However, when debugging your code you may want to run your program, then make a modification and run it again to see what happens. But, an ordinary dictionary or set will return a completely different ordering of the items within it, making debugging difficult.</p>
+<p>The OrderedMap, OrderedSet, and OrderedFrozenSet classes provided here require an ordering of the keys or items stored in them. However, they also deterministically iterate over those items and keys, returning them in ascending sorted order. You may wish to use these classes in your code. You can save these classes in a file called orderedcollections.py. Then it can be imported for use in your code in the usual way.</p>
+<div class="figboxcenter docutils container">
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">OrderedMap</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__iter__</span><span class="p">()))</span>
+
+<span class="k">class</span> <span class="nc">OrderedSet</span><span class="p">(</span><span class="nb">set</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">lst</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__iter__</span><span class="p">()))</span>
+
+<span class="k">class</span> <span class="nc">OrderedFrozenSet</span><span class="p">(</span><span class="nb">frozenset</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">lst</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="bp">self</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__iter__</span><span class="p">()))</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="the-state-class">
+<h2>2.2. The State Class<a class="headerlink" href="#the-state-class" title="Permalink to this headline">¶</a></h2>
+<p>The finite state automata in chapter 2 can be modeled with a State class that can be used to construct finite state automata. In the state class below there are <em>classes</em> that are referred to. The <em>classes</em> define classes of characters. For instance, the class <em>letter</em> could be used to represent all characters that are letters, as in a..z and A..Z. So, the <em>classes</em> is a dictionary of class names like <em>letter</em> to sets of ASCII values (i.e. integers). For instance the class <em>letter</em> would map to the set of values 65..90 and 97..122 for all the letters from A to Z, both small and captital. When you build an automaton you should also build this dictionary of classes.</p>
+<div class="figboxcenter docutils container">
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="n">NoTransition</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+<span class="k">class</span> <span class="nc">State</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">acceptsTokenId</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">transitions</span> <span class="o">=</span> <span class="p">{}):</span>
+        <span class="c1"># An id of -1 is not allowed since that indicates there is</span>
+        <span class="c1"># no transition on a value.</span>
+        <span class="k">if</span> <span class="nb">id</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;A state id of -1 is not allowed.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="c1"># A copy of the list of transitions needs to be created</span>
+        <span class="c1"># because Python makes only one instance of a default</span>
+        <span class="c1"># parameter. Changing the list later, by adding a transition</span>
+        <span class="c1"># would add that transition to every state. Wow! Talk about</span>
+        <span class="c1"># bad semantics...</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transitions</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">transitions</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">acceptsTokenId</span> <span class="o">=</span> <span class="n">acceptsTokenId</span>
+
+        <span class="c1"># This will cause onGoTo to generate an Exception if called</span>
+        <span class="c1"># before the setClasses method is called.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classes</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">setClasses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">classes</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classes</span> <span class="o">=</span> <span class="n">classes</span>
+
+    <span class="k">def</span> <span class="nf">addTransition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">onClass</span><span class="p">,</span> <span class="n">toState</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">onClass</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transitions</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Duplicate Transition &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">onClass</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;. Consider using NFA State instead.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transitions</span><span class="p">[</span><span class="n">onClass</span><span class="p">]</span> <span class="o">=</span> <span class="n">toState</span>
+
+    <span class="k">def</span> <span class="nf">hasTransition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">onClass</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">onClass</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transitions</span>
+
+    <span class="k">def</span> <span class="nf">onClassGoTo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">onClass</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hasTransition</span><span class="p">(</span><span class="n">onClass</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transitions</span><span class="p">[</span><span class="n">onClass</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">NoTransition</span>
+
+    <span class="c1"># You must call setClasses before calling the onGoTo method.</span>
+    <span class="k">def</span> <span class="nf">onGoTo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">on</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">aClass</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transitions</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">on</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">[</span><span class="n">aClass</span><span class="p">]:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transitions</span><span class="p">[</span><span class="n">aClass</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">NoTransition</span>
+
+    <span class="k">def</span> <span class="nf">getTransitions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transitions</span>
+
+    <span class="k">def</span> <span class="nf">getId</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
+
+    <span class="k">def</span> <span class="nf">setAccepting</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokenId</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">acceptsTokenId</span> <span class="o">=</span> <span class="n">tokenId</span>
+
+    <span class="k">def</span> <span class="nf">isAccepting</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">acceptsTokenId</span> <span class="o">!=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">getAcceptsTokenId</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">acceptsTokenId</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;State(&quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">acceptsTokenId</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span> <span class="o">+</span> \
+            <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transitions</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="s2">&quot;State &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">acceptsTokenId</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">val</span> <span class="o">+=</span> <span class="s2">&quot;    accepts token with identifier: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">acceptsTokenId</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+        <span class="k">for</span> <span class="n">onClass</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transitions</span><span class="p">:</span>
+            <span class="n">val</span> <span class="o">+=</span> <span class="s2">&quot;    On &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">onClass</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; Go To &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transitions</span><span class="p">[</span><span class="n">onClass</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+        <span class="k">return</span> <span class="n">val</span>
+</pre></div>
+</td></tr></table></div>
+<p><strong>Fig. 2.1: The Automata State Class - state.py</strong></p>
+</div>
+</div>
+<div class="section" id="jpython-programming-language-example">
+<h2>2.3. JPython Programming Language Example<a class="headerlink" href="#jpython-programming-language-example" title="Permalink to this headline">¶</a></h2>
+<p>JPython is a simple programming language similar to Python, but with some Java syntax thrown in. Here is a sample program from this language.</p>
+<div class="figboxcenter docutils container">
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># In JPython you can declare functions and variables.</span>
+<span class="c1"># Functions are declared/defined with a def keyword.</span>
+<span class="k">def</span> <span class="nf">factorial</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+
+        <span class="c1"># This involves a recursive call. Statements are</span>
+        <span class="c1"># terminated with semicolons.</span>
+        <span class="k">return</span> <span class="n">n</span> <span class="o">*</span> <span class="n">factorial</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">iterativeFactorial</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1"># The decl is to declare a local variable.</span>
+        <span class="n">decl</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">result</span> <span class="o">*</span> <span class="n">i</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;The factorial of 5 is&quot;</span><span class="p">,</span> <span class="n">factorial</span><span class="p">(</span><span class="mi">5</span><span class="p">));</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;The iterative factorial of 5 is&#39;</span><span class="p">,</span> <span class="n">iterativeFactorial</span><span class="p">(</span><span class="mi">5</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="n">main</span><span class="p">();</span>
+</pre></div>
+</td></tr></table></div>
+<p><strong>Fig. 2.2: JPython Sample Program - sample.jpy</strong></p>
+</div>
+</div>
+<div class="section" id="the-streamreader-class">
+<h2>2.4. The StreamReader Class<a class="headerlink" href="#the-streamreader-class" title="Permalink to this headline">¶</a></h2>
+<p>This is the StreamReader class which is useful in reading input and parsing it.</p>
+<div class="figboxcenter docutils container">
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+ 10
+ 11
+ 12
+ 13
+ 14
+ 15
+ 16
+ 17
+ 18
+ 19
+ 20
+ 21
+ 22
+ 23
+ 24
+ 25
+ 26
+ 27
+ 28
+ 29
+ 30
+ 31
+ 32
+ 33
+ 34
+ 35
+ 36
+ 37
+ 38
+ 39
+ 40
+ 41
+ 42
+ 43
+ 44
+ 45
+ 46
+ 47
+ 48
+ 49
+ 50
+ 51
+ 52
+ 53
+ 54
+ 55
+ 56
+ 57
+ 58
+ 59
+ 60
+ 61
+ 62
+ 63
+ 64
+ 65
+ 66
+ 67
+ 68
+ 69
+ 70
+ 71
+ 72
+ 73
+ 74
+ 75
+ 76
+ 77
+ 78
+ 79
+ 80
+ 81
+ 82
+ 83
+ 84
+ 85
+ 86
+ 87
+ 88
+ 89
+ 90
+ 91
+ 92
+ 93
+ 94
+ 95
+ 96
+ 97
+ 98
+ 99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="n">EOF</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">digits</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="s2">&quot;0123456789&quot;</span><span class="p">))</span>
+<span class="n">lettersdigitsunderscore</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="s2">&quot;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789&quot;</span><span class="p">))</span>
+<span class="n">letters</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="s2">&quot;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;</span><span class="p">))</span>
+<span class="n">ws</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="s2">&quot; </span><span class="se">\t\n\r</span><span class="s2">&quot;</span><span class="p">))</span>
+<span class="n">badidentifiertoken</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">notAChar</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="k">class</span> <span class="nc">StreamReader</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instream</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instream</span> <span class="o">=</span> <span class="n">instream</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nextChars</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">EOF</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">line</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">column</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">charsRead</span> <span class="o">=</span> <span class="mi">0</span>
+
+
+    <span class="k">def</span> <span class="nf">readChar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nextChars</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">nextChar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nextChars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nextChars</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nextChars</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">nextChar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instream</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">nextChar</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">nextChar</span> <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="n">EOF</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">nextChar</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">line</span><span class="o">+=</span><span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">column</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">column</span><span class="o">+=</span><span class="mi">1</span>
+
+
+        <span class="k">if</span> <span class="n">nextChar</span> <span class="o">==</span> <span class="nb">chr</span><span class="p">(</span><span class="n">EOF</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">EOF</span> <span class="o">=</span> <span class="bp">True</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">charsRead</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">nextChar</span>
+
+    <span class="k">def</span> <span class="nf">unreadChar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ch</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">notAChar</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">EOF</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">nextChars</span> <span class="o">=</span> <span class="n">ch</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">nextChars</span>
+
+        <span class="k">if</span> <span class="n">ch</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">line</span><span class="o">-=</span><span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">column</span><span class="o">-=</span><span class="mi">1</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">charsRead</span> <span class="o">-=</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">numCharsRead</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># return the number of characters read. This is useful when backtracking is performed</span>
+        <span class="c1"># in case no progress is being made in reading the stream.</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">charsRead</span>
+
+    <span class="k">def</span> <span class="nf">eof</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">EOF</span>
+
+    <span class="k">def</span> <span class="nf">readUpTo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delimiter</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="n">done</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">done</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">eof</span><span class="p">():</span>
+
+            <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">readChar</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">eof</span><span class="p">():</span>
+                <span class="n">result</span> <span class="o">+=</span> <span class="n">c</span>
+
+            <span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">delimiter</span><span class="p">):]</span> <span class="o">==</span> <span class="n">delimiter</span><span class="p">:</span>
+                <span class="n">done</span> <span class="o">=</span> <span class="bp">True</span>
+
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span> <span class="nf">readInt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">number</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">skipWhiteSpace</span><span class="p">()</span>
+
+        <span class="n">digit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">readChar</span><span class="p">()</span>
+
+        <span class="k">while</span> <span class="n">digit</span> <span class="ow">in</span> <span class="n">digits</span><span class="p">:</span>
+            <span class="n">number</span> <span class="o">+=</span> <span class="n">digit</span>
+            <span class="n">digit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">readChar</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">unreadChar</span><span class="p">(</span><span class="n">digit</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">readIdentifier</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">id</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">skipWhiteSpace</span><span class="p">()</span>
+
+        <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">readChar</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">letters</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Bad identifier token found in source file starting with&quot;</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="s2">&quot;at line&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">line</span><span class="p">,</span> <span class="s2">&quot;and column&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">column</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">badidentifiertoken</span><span class="p">)</span>
+
+        <span class="k">while</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">lettersdigitsunderscore</span><span class="p">:</span>
+            <span class="nb">id</span> <span class="o">+=</span> <span class="n">c</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">readChar</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">unreadChar</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">id</span>
+
+    <span class="k">def</span> <span class="nf">skipWhiteSpace</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">readChar</span><span class="p">()</span>
+
+        <span class="k">while</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ws</span><span class="p">:</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">readChar</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">unreadChar</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">peek</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="c1"># Skip white space, then look for the value as the next characters in the input file.</span>
+        <span class="c1"># Remember the read characters, but return true if they are found and false otherwise.</span>
+
+        <span class="n">readChars</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">skipWhiteSpace</span><span class="p">()</span>
+
+        <span class="n">done</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">readChars</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">done</span><span class="p">:</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">readChar</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="n">EOF</span><span class="p">:</span>
+                <span class="n">done</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">readChars</span> <span class="o">+=</span> <span class="n">c</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">readChars</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">unreadChar</span><span class="p">(</span><span class="n">readChars</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">readChars</span> <span class="o">==</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+
+        <span class="k">return</span> <span class="bp">False</span>
+
+    <span class="k">def</span> <span class="nf">skipComments</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># skip comments</span>
+
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">peek</span><span class="p">(</span><span class="s2">&quot;(*&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">readUpTo</span><span class="p">(</span><span class="s2">&quot;*)&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">getLineNumber</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">line</span>
+
+    <span class="k">def</span> <span class="nf">getColNumber</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">column</span>
+
+    <span class="k">def</span> <span class="nf">getToken</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skipWhiteSpace</span><span class="p">()</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">readChar</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">digits</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">unreadChar</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">readInt</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">letters</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">unreadChar</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">readIdentifier</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">c</span>
+</pre></div>
+</td></tr></table></div>
+<p><strong>Fig. 2.3: The StreamReader Class - streamreader.py</strong></p>
+</div>
+</div>
+<div class="section" id="an-nfa-example">
+<h2>2.5. An NFA Example<a class="headerlink" href="#an-nfa-example" title="Permalink to this headline">¶</a></h2>
+<p>This section presents an an NFA (a non-deterministic finite statement machine) implementation as an example only. Because of its non-deterministic nature, it uses backtracking search to determine if a string is accepted by the machine or not. NOTE that null transitions are denoted as epsilon and not lambda.</p>
+<p>To implement this example, the NFA state must be defined because the transition function of a non-deterministic machine takes a state and an input symbol and returns a <em>set of states</em>.</p>
+<div class="figboxcenter docutils container">
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">NFAState</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">acceptsTokenId</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">transitions</span> <span class="o">=</span> <span class="p">{}):</span>
+        <span class="c1"># An id of -1 is not allowed since that indicates there is</span>
+        <span class="c1"># no transition on a value.</span>
+        <span class="k">if</span> <span class="nb">id</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;A state id of -1 is not allowed.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="c1"># A copy of the list of transitions needs to be created</span>
+        <span class="c1"># because Python makes only one instance of a default</span>
+        <span class="c1"># parameter. Changing the list later, by adding a transition</span>
+        <span class="c1"># would add that transition to every state. Wow! Talk about</span>
+        <span class="c1"># bad semantics...</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transitions</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">transitions</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">acceptsTokenId</span> <span class="o">=</span> <span class="n">acceptsTokenId</span>
+
+        <span class="c1"># This will cause onGoTo to generate an Exception if called</span>
+        <span class="c1"># before the setClasses method is called.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classes</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">setClasses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">classes</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classes</span> <span class="o">=</span> <span class="n">classes</span>
+
+    <span class="k">def</span> <span class="nf">addTransition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">onClass</span><span class="p">,</span> <span class="n">toStateId</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">onClass</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transitions</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">transitions</span><span class="p">[</span><span class="n">onClass</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">toStateId</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">transitions</span><span class="p">[</span><span class="n">onClass</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">toStateId</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">hasTransition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">onClass</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">onClass</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transitions</span>
+
+    <span class="k">def</span> <span class="nf">onClassGoTo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">onClass</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">onClass</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transitions</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transitions</span><span class="p">[</span><span class="n">onClass</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="nb">set</span><span class="p">([])</span>
+
+    <span class="c1"># You must call setClasses before calling the onGoTo method.</span>
+    <span class="k">def</span> <span class="nf">onGoTo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">on</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">aClass</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transitions</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">on</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">[</span><span class="n">aClass</span><span class="p">]:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transitions</span><span class="p">[</span><span class="n">aClass</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="nb">set</span><span class="p">([])</span>
+
+    <span class="k">def</span> <span class="nf">getTransitions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transitions</span>
+
+    <span class="k">def</span> <span class="nf">getId</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
+
+    <span class="k">def</span> <span class="nf">setAccepting</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokenId</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">acceptsTokenId</span> <span class="o">=</span> <span class="n">tokenId</span>
+
+    <span class="k">def</span> <span class="nf">isAccepting</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">acceptsTokenId</span> <span class="o">!=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">getAcceptsTokenId</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">acceptsTokenId</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;NFAState(&quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">acceptsTokenId</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span> <span class="o">+</span> \
+            <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transitions</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="s2">&quot;NFAState &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">acceptsTokenId</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">val</span> <span class="o">+=</span> <span class="s2">&quot;    accepts token with identifier: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">acceptsTokenId</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+        <span class="k">for</span> <span class="n">onClass</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transitions</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">toStateId</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transitions</span><span class="p">[</span><span class="n">onClass</span><span class="p">]:</span>
+                <span class="n">val</span> <span class="o">+=</span> <span class="s2">&quot;    On &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">on</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; Go To &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">toStateId</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+        <span class="k">return</span> <span class="n">val</span>
+</pre></div>
+</td></tr></table></div>
+<p><strong>Fig. 2.4: The NFA State Class</strong></p>
+</div>
+<p>The code in figure 2.5 completes the NFA example code. It employs recursive backtracking through the acceptsSuffix function. Notice that when <em>onGoTo</em> and <em>onClassGoTo</em> are called that a set of state ids is returned, even if there is only one state in the set.</p>
+<div class="figboxcenter docutils container">
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+ 10
+ 11
+ 12
+ 13
+ 14
+ 15
+ 16
+ 17
+ 18
+ 19
+ 20
+ 21
+ 22
+ 23
+ 24
+ 25
+ 26
+ 27
+ 28
+ 29
+ 30
+ 31
+ 32
+ 33
+ 34
+ 35
+ 36
+ 37
+ 38
+ 39
+ 40
+ 41
+ 42
+ 43
+ 44
+ 45
+ 46
+ 47
+ 48
+ 49
+ 50
+ 51
+ 52
+ 53
+ 54
+ 55
+ 56
+ 57
+ 58
+ 59
+ 60
+ 61
+ 62
+ 63
+ 64
+ 65
+ 66
+ 67
+ 68
+ 69
+ 70
+ 71
+ 72
+ 73
+ 74
+ 75
+ 76
+ 77
+ 78
+ 79
+ 80
+ 81
+ 82
+ 83
+ 84
+ 85
+ 86
+ 87
+ 88
+ 89
+ 90
+ 91
+ 92
+ 93
+ 94
+ 95
+ 96
+ 97
+ 98
+ 99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">nfastate</span>
+<span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">streamreader</span>
+
+<span class="c1"># This NFAStateMachine demonstrates backtracking search while trying</span>
+<span class="c1"># to find a means of accepting a string of characters. The NFA allows</span>
+<span class="c1"># the use of &quot;epsilon&quot; transitions and cycles of &quot;epsilon&quot; transitions.</span>
+<span class="c1"># It avoids getting stuck in a cycle by keeping track of visited</span>
+<span class="c1"># &quot;states&quot;. The state of the NFA is determined not only by the nfa</span>
+<span class="c1"># state it is in, but also by the state of the stream it is reading.</span>
+<span class="c1"># A cycle occurs when a state is visited twice with the same number</span>
+<span class="c1"># of characters read from the stream.</span>
+
+<span class="k">class</span> <span class="nc">NFAStateMachine</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">startStateId</span><span class="p">,</span> <span class="n">classes</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="n">states</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">startStateId</span> <span class="o">=</span> <span class="n">startStateId</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classes</span> <span class="o">=</span> <span class="n">classes</span>
+
+        <span class="k">for</span> <span class="n">stateId</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">stateId</span><span class="p">]</span><span class="o">.</span><span class="n">setClasses</span><span class="p">(</span><span class="n">classes</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">accepts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strm</span><span class="p">):</span>
+        <span class="c1"># The accepts method uses a recursive acceptsSuffix</span>
+        <span class="c1"># which starts in the given state (not necessarily the</span>
+        <span class="c1"># start state) and recursively uses search with backtracking</span>
+        <span class="c1"># to try to find a final state with all of the input consumed.</span>
+        <span class="c1"># If it is successful on this path then it returns True and if</span>
+        <span class="c1"># not it returns False to continue to backtrack and look for</span>
+        <span class="c1"># another path to a final state.</span>
+
+        <span class="k">def</span> <span class="nf">acceptsSuffix</span><span class="p">(</span><span class="n">stateId</span><span class="p">):</span>
+            <span class="c1">#print(&quot;trying&quot;, stateId, &quot;with&quot;, strm.numCharsRead(), &quot;characters read&quot;)</span>
+
+            <span class="c1"># If we are not making any progress, we must backtrack.</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">stateId</span><span class="p">,</span> <span class="n">strm</span><span class="o">.</span><span class="n">numCharsRead</span><span class="p">())</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">:</span>
+                <span class="c1">#print(&quot;backtracking from&quot;, stateId, &quot;already visited&quot;)</span>
+                <span class="k">return</span> <span class="bp">False</span>
+
+            <span class="c1"># Otherwise, add the (stateId, number of characters read) to the</span>
+            <span class="c1"># set of visited states.</span>
+            <span class="n">visited</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">stateId</span><span class="p">,</span> <span class="n">strm</span><span class="o">.</span><span class="n">numCharsRead</span><span class="p">()))</span>
+            <span class="n">theState</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">stateId</span><span class="p">]</span>
+
+
+            <span class="c1"># Check that we are not at end of file and in an accepting state.</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">strm</span><span class="o">.</span><span class="n">readChar</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">strm</span><span class="o">.</span><span class="n">eof</span><span class="p">()</span> <span class="ow">and</span> <span class="n">theState</span><span class="o">.</span><span class="n">isAccepting</span><span class="p">():</span>
+                <span class="c1">#print(stateId)</span>
+                <span class="k">return</span> <span class="bp">True</span>
+
+            <span class="n">strm</span><span class="o">.</span><span class="n">unreadChar</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">onClass</span> <span class="ow">in</span> <span class="n">theState</span><span class="o">.</span><span class="n">getTransitions</span><span class="p">():</span>
+                <span class="n">toStateIds</span> <span class="o">=</span> <span class="n">theState</span><span class="o">.</span><span class="n">getTransitions</span><span class="p">()[</span><span class="n">onClass</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="n">onClass</span> <span class="o">==</span> <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">toStateId</span> <span class="ow">in</span> <span class="n">toStateIds</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">acceptsSuffix</span><span class="p">(</span><span class="n">toStateId</span><span class="p">):</span>
+                            <span class="c1">#print(stateId)</span>
+                            <span class="k">return</span> <span class="bp">True</span>
+
+                <span class="k">else</span><span class="p">:</span> <span class="c1"># onClass is not an epsilon transition</span>
+                    <span class="n">c</span> <span class="o">=</span> <span class="n">strm</span><span class="o">.</span><span class="n">readChar</span><span class="p">()</span>
+
+                    <span class="k">for</span> <span class="n">toStateId</span> <span class="ow">in</span> <span class="n">toStateIds</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">[</span><span class="n">onClass</span><span class="p">]</span> <span class="ow">and</span> <span class="n">acceptsSuffix</span><span class="p">(</span><span class="n">toStateId</span><span class="p">):</span>
+                            <span class="c1">#print(stateId)</span>
+                            <span class="k">return</span> <span class="bp">True</span>
+
+                    <span class="n">strm</span><span class="o">.</span><span class="n">unreadChar</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+
+            <span class="c1">#print(&quot;backtracking from&quot;, stateId)</span>
+            <span class="k">return</span> <span class="bp">False</span>
+
+        <span class="c1"># This set will take care of keeping track of all traversed</span>
+        <span class="c1"># states and characters read from the stream. If progress is</span>
+        <span class="c1"># not made, then we must backtrack.</span>
+        <span class="n">visited</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="c1"># Beginning of accepts function body - We call acceptsSuffix</span>
+        <span class="c1"># initially starting from the start state.</span>
+        <span class="k">return</span> <span class="n">acceptsSuffix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">startStateId</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+
+    <span class="n">q0</span> <span class="o">=</span> <span class="n">nfastate</span><span class="o">.</span><span class="n">NFAState</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">q1</span> <span class="o">=</span> <span class="n">nfastate</span><span class="o">.</span><span class="n">NFAState</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">q2</span> <span class="o">=</span> <span class="n">nfastate</span><span class="o">.</span><span class="n">NFAState</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">classes</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;zero&quot;</span><span class="p">:</span><span class="nb">frozenset</span><span class="p">([</span><span class="s2">&quot;0&quot;</span><span class="p">]),</span> <span class="s2">&quot;one&quot;</span><span class="p">:</span><span class="nb">frozenset</span><span class="p">([</span><span class="s2">&quot;1&quot;</span><span class="p">]),</span> <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span><span class="nb">frozenset</span><span class="p">([])}</span>
+
+    <span class="n">q0</span><span class="o">.</span><span class="n">addTransition</span><span class="p">(</span><span class="s2">&quot;zero&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">q0</span><span class="o">.</span><span class="n">addTransition</span><span class="p">(</span><span class="s2">&quot;one&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">q1</span><span class="o">.</span><span class="n">addTransition</span><span class="p">(</span><span class="s2">&quot;zero&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">q1</span><span class="o">.</span><span class="n">addTransition</span><span class="p">(</span><span class="s2">&quot;one&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">q1</span><span class="o">.</span><span class="n">addTransition</span><span class="p">(</span><span class="s2">&quot;zero&quot;</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">q2</span><span class="o">.</span><span class="n">addTransition</span><span class="p">(</span><span class="s2">&quot;epsilon&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">q0</span><span class="o">.</span><span class="n">addTransition</span><span class="p">(</span><span class="s2">&quot;epsilon&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">q2</span><span class="o">.</span><span class="n">addTransition</span><span class="p">(</span><span class="s2">&quot;one&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">nfa</span> <span class="o">=</span> <span class="n">NFAStateMachine</span><span class="p">({</span><span class="mi">0</span><span class="p">:</span><span class="n">q0</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">q1</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="n">q2</span><span class="p">},</span> <span class="mi">0</span><span class="p">,</span> <span class="n">classes</span><span class="p">)</span>
+
+    <span class="n">done</span> <span class="o">=</span> <span class="bp">False</span>
+
+    <span class="n">s</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Please enter a string of zeros and ones (type done to quit): &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+    <span class="k">while</span> <span class="n">s</span><span class="o">!=</span><span class="s2">&quot;done&quot;</span><span class="p">:</span>
+
+        <span class="n">strm</span> <span class="o">=</span> <span class="n">streamreader</span><span class="o">.</span><span class="n">StreamReader</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">nfa</span><span class="o">.</span><span class="n">accepts</span><span class="p">(</span><span class="n">strm</span><span class="p">):</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;The string is accepted by the finite state machine.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;The string is not accepted.&quot;</span><span class="p">)</span>
+
+        <span class="n">s</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Please enter a string of zeros and ones (type done to quit): &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Program Completed.&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span><span class="o">==</span><span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</td></tr></table></div>
+<p><strong>Fig. 2.5: An NFA Example</strong></p>
+</div>
+</div>
+<div class="section" id="a-scangen-input-file">
+<h2>2.6. A Scangen Input File<a class="headerlink" href="#a-scangen-input-file" title="Permalink to this headline">¶</a></h2>
+<p>Here is a Scangen input file for the JPython programming language.</p>
+<div class="figboxcenter docutils container">
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+ 10
+ 11
+ 12
+ 13
+ 14
+ 15
+ 16
+ 17
+ 18
+ 19
+ 20
+ 21
+ 22
+ 23
+ 24
+ 25
+ 26
+ 27
+ 28
+ 29
+ 30
+ 31
+ 32
+ 33
+ 34
+ 35
+ 36
+ 37
+ 38
+ 39
+ 40
+ 41
+ 42
+ 43
+ 44
+ 45
+ 46
+ 47
+ 48
+ 49
+ 50
+ 51
+ 52
+ 53
+ 54
+ 55
+ 56
+ 57
+ 58
+ 59
+ 60
+ 61
+ 62
+ 63
+ 64
+ 65
+ 66
+ 67
+ 68
+ 69
+ 70
+ 71
+ 72
+ 73
+ 74
+ 75
+ 76
+ 77
+ 78
+ 79
+ 80
+ 81
+ 82
+ 83
+ 84
+ 85
+ 86
+ 87
+ 88
+ 89
+ 90
+ 91
+ 92
+ 93
+ 94
+ 95
+ 96
+ 97
+ 98
+ 99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">*</span> <span class="n">This</span> <span class="n">a</span> <span class="n">sample</span> <span class="nb">input</span> <span class="nb">file</span> <span class="k">for</span> <span class="n">the</span> <span class="n">scangen</span><span class="o">.</span><span class="n">py</span> <span class="n">program</span><span class="o">.</span> <span class="n">The</span>
+   <span class="n">program</span> <span class="n">reads</span> <span class="n">an</span> <span class="nb">input</span> <span class="nb">file</span> <span class="n">like</span> <span class="n">this</span> <span class="n">one</span> <span class="ow">and</span> <span class="n">produces</span> <span class="n">a</span>
+   <span class="n">scanner</span> <span class="n">which</span> <span class="ow">is</span> <span class="n">capable</span> <span class="n">of</span> <span class="n">tokenizing</span> <span class="n">the</span> <span class="nb">input</span> <span class="k">for</span> <span class="n">the</span>
+   <span class="n">programming</span> <span class="n">language</span> <span class="n">defined</span> <span class="ow">in</span> <span class="n">this</span> <span class="nb">file</span><span class="o">.</span> <span class="n">For</span> <span class="n">instance</span><span class="p">,</span>
+   <span class="n">this</span> <span class="nb">file</span> <span class="n">defines</span> <span class="n">the</span> <span class="n">programming</span> <span class="n">language</span> <span class="k">for</span> <span class="n">a</span> <span class="n">variant</span>
+   <span class="n">of</span> <span class="n">Python</span> <span class="n">I</span> <span class="n">have</span> <span class="n">called</span> <span class="n">JPython</span><span class="o">.</span> <span class="n">It</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">combination</span> <span class="n">of</span>
+   <span class="n">Java</span> <span class="ow">and</span> <span class="n">Python</span><span class="o">.</span>
+
+   <span class="n">Here</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">sample</span> <span class="n">program</span> <span class="kn">from</span> <span class="nn">that</span> <span class="nn">language.</span>
+
+        <span class="c1"># In JPython you can declare functions and variables.</span>
+        <span class="c1"># Functions are declared/defined with a def keyword.</span>
+        <span class="k">def</span> <span class="nf">factorial</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+
+                <span class="c1"># This involves a recursive call. Statements are</span>
+                <span class="c1"># terminated with semicolons.</span>
+                <span class="k">return</span> <span class="n">n</span> <span class="o">*</span> <span class="n">factorial</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+
+
+        <span class="k">def</span> <span class="nf">iterativeFactorial</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+                <span class="c1"># The decl is to declare a local variable.</span>
+                <span class="n">decl</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">result</span> <span class="o">=</span> <span class="n">result</span> <span class="o">*</span> <span class="n">i</span><span class="p">;</span>
+                <span class="p">}</span>
+
+                <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+        <span class="p">}</span>
+
+
+
+        <span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+                <span class="k">print</span><span class="p">(</span><span class="s2">&quot;The factorial of 5 is&quot;</span><span class="p">,</span> <span class="n">factorial</span><span class="p">(</span><span class="mi">5</span><span class="p">));</span>
+                <span class="k">print</span><span class="p">(</span><span class="s1">&#39;The iterative factorial of 5 is&#39;</span><span class="p">,</span> <span class="n">iterativeFactorial</span><span class="p">(</span><span class="mi">5</span><span class="p">));</span>
+        <span class="p">}</span>
+
+<span class="o">*</span><span class="p">)</span>
+
+<span class="p">(</span><span class="o">*</span> <span class="n">Comments</span> <span class="k">for</span> <span class="n">the</span> <span class="n">scangen</span> <span class="nb">input</span> <span class="nb">file</span> <span class="n">appear</span>
+   <span class="n">within</span> <span class="n">paren</span> <span class="n">asterisk</span> <span class="n">pairs</span> <span class="k">as</span> <span class="n">shown</span> <span class="n">here</span><span class="o">.</span> <span class="o">*</span><span class="p">)</span>
+
+<span class="c1">#CLASSES</span>
+
+
+<span class="p">(</span><span class="o">*</span> <span class="n">The</span> <span class="n">classes</span> <span class="n">defines</span> <span class="n">classes</span> <span class="n">of</span> <span class="n">ASCII</span> <span class="n">character</span> <span class="n">codes</span><span class="o">.</span> <span class="n">All</span>
+   <span class="n">supported</span> <span class="n">variants</span> <span class="n">of</span> <span class="n">the</span> <span class="k">class</span> <span class="nc">definitions</span> <span class="n">are</span> <span class="n">shown</span> <span class="n">here</span><span class="o">.</span>
+   <span class="n">The</span> <span class="o">^</span> <span class="n">operator</span> <span class="n">means</span> <span class="n">that</span> <span class="n">the</span> <span class="k">class</span> <span class="nc">includes</span> <span class="nb">all</span> <span class="n">ASCII</span>
+   <span class="n">codes</span> <span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">e</span><span class="o">.</span> <span class="mi">0</span> <span class="n">to</span> <span class="mi">255</span><span class="p">)</span> <span class="n">that</span> <span class="n">are</span> <span class="n">NOT</span> <span class="n">the</span> <span class="n">given</span> <span class="n">character</span>
+   <span class="n">codes</span><span class="o">.</span> <span class="n">The</span> <span class="n">names</span> <span class="n">of</span> <span class="n">the</span> <span class="n">classes</span> <span class="n">below</span> <span class="n">describe</span> <span class="n">their</span>
+   <span class="n">true</span> <span class="n">nature</span><span class="o">.</span>
+<span class="o">*</span><span class="p">)</span>
+
+<span class="n">anycharbutnewline</span> <span class="o">=</span> <span class="o">^</span><span class="mf">10.</span><span class="o">.</span><span class="mi">13</span><span class="p">;</span>
+<span class="n">anycharbutquote</span> <span class="o">=</span> <span class="o">^</span><span class="mi">39</span><span class="p">;</span>
+<span class="n">anycharbutdoublequote</span> <span class="o">=</span> <span class="o">^</span><span class="s1">&#39;&quot;&#39;</span><span class="p">;</span>
+<span class="n">quote</span> <span class="o">=</span> <span class="mi">39</span><span class="p">;</span>
+<span class="n">doublequote</span> <span class="o">=</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">;</span>
+<span class="n">pound</span> <span class="o">=</span> <span class="s1">&#39;#&#39;</span><span class="p">;</span>
+<span class="n">letter</span>  <span class="o">=</span> <span class="s1">&#39;A&#39;</span><span class="o">..</span><span class="s1">&#39;Z&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="o">..</span><span class="s1">&#39;z&#39;</span><span class="p">;</span>
+<span class="n">digit</span>   <span class="o">=</span> <span class="s1">&#39;0&#39;</span><span class="o">..</span><span class="s1">&#39;9&#39;</span><span class="p">;</span>
+<span class="n">EOF</span>     <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+
+<span class="c1">#KEYWORDS</span>
+
+<span class="p">(</span><span class="o">*</span> <span class="n">Keywords</span> <span class="n">are</span> <span class="n">optional</span> <span class="n">but</span> <span class="n">define</span> <span class="n">the</span> <span class="n">identifier</span> <span class="n">tokens</span> <span class="n">that</span> <span class="n">should</span>
+   <span class="n">be</span> <span class="n">recognized</span> <span class="k">as</span> <span class="n">keywords</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">identifiers</span><span class="o">.</span>
+
+   <span class="n">The</span> <span class="n">number</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">token</span> <span class="n">identifier</span> <span class="n">that</span> <span class="n">may</span> <span class="n">be</span> <span class="n">used</span> <span class="n">instead</span> <span class="n">of</span> <span class="n">the</span> <span class="n">actual</span>
+   <span class="n">string</span> <span class="n">to</span> <span class="n">identify</span> <span class="n">the</span> <span class="n">keyword</span><span class="o">.</span> <span class="n">Constants</span> <span class="n">like</span> <span class="n">the</span> <span class="n">name</span> <span class="n">def_keyword</span>
+   <span class="n">are</span> <span class="n">defined</span> <span class="n">by</span> <span class="n">scangen</span> <span class="k">for</span> <span class="n">each</span> <span class="n">keyword</span> <span class="n">identifier</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">generated</span> <span class="n">scanner</span><span class="o">.</span>
+
+   <span class="n">Tokens</span> <span class="k">print</span><span class="p">,</span> <span class="nb">range</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="bp">False</span> <span class="n">are</span> <span class="nb">all</span> <span class="n">bindings</span> <span class="n">that</span> <span class="n">exist</span> <span class="n">during</span> <span class="n">code</span>
+   <span class="n">generation</span> <span class="n">so</span> <span class="n">are</span> <span class="ow">not</span> <span class="n">recognized</span> <span class="k">as</span> <span class="n">keywords</span><span class="o">.</span>
+<span class="o">*</span><span class="p">)</span>
+
+<span class="s1">&#39;def&#39;</span><span class="p">;</span>
+<span class="s1">&#39;if&#39;</span><span class="p">;</span>
+<span class="s1">&#39;while&#39;</span><span class="p">;</span>
+<span class="s1">&#39;len&#39;</span><span class="p">;</span>
+<span class="s1">&#39;and&#39;</span><span class="p">;</span>
+<span class="s1">&#39;not&#39;</span><span class="p">;</span>
+<span class="s1">&#39;or&#39;</span><span class="p">;</span>
+<span class="s1">&#39;return&#39;</span><span class="p">;</span>
+<span class="s1">&#39;in&#39;</span><span class="p">;</span>
+<span class="s1">&#39;None&#39;</span><span class="p">;</span>
+<span class="s1">&#39;for&#39;</span><span class="p">;</span>
+<span class="s1">&#39;else&#39;</span><span class="p">;</span>
+<span class="s1">&#39;decl&#39;</span><span class="p">;</span>
+<span class="s1">&#39;True&#39;</span><span class="p">;</span>
+<span class="s1">&#39;False&#39;</span><span class="p">;</span>
+
+
+<span class="c1">#TOKENS</span>
+
+<span class="p">(</span><span class="o">*</span> <span class="n">The</span> <span class="n">identifier</span> <span class="n">token</span> <span class="n">must</span> <span class="n">be</span> <span class="n">the</span> <span class="n">first</span> <span class="n">token</span> <span class="n">defined</span> <span class="ow">in</span> <span class="n">this</span> <span class="nb">list</span> <span class="k">for</span> <span class="n">the</span> <span class="n">keyword</span>
+   <span class="n">definitions</span> <span class="n">given</span> <span class="n">above</span><span class="o">.</span>
+
+   <span class="n">The</span> <span class="n">token</span> <span class="n">identifier</span> <span class="n">numbers</span> <span class="n">also</span> <span class="n">have</span> <span class="n">constants</span> <span class="n">defined</span> <span class="k">for</span> <span class="n">them</span> <span class="n">like</span> <span class="n">the</span> <span class="n">name</span>
+   <span class="n">identifier_token</span> <span class="k">for</span> <span class="n">instance</span><span class="o">.</span> <span class="n">These</span> <span class="n">names</span> <span class="n">are</span> <span class="n">created</span> <span class="n">by</span> <span class="n">the</span> <span class="n">scangen</span> <span class="n">program</span> <span class="ow">in</span> <span class="n">the</span>
+   <span class="n">generated</span> <span class="n">scanner</span><span class="o">.</span>
+
+   <span class="n">The</span> <span class="n">name</span> <span class="s2">&quot;comment&quot;</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">special</span> <span class="n">name</span><span class="o">.</span> <span class="n">If</span> <span class="n">used</span><span class="p">,</span> <span class="n">it</span> <span class="n">represents</span> <span class="n">comments</span> <span class="n">that</span> <span class="n">are</span> <span class="n">to</span> <span class="n">be</span>
+   <span class="n">ignored</span> <span class="n">by</span> <span class="n">the</span> <span class="n">scanner</span><span class="o">.</span> <span class="n">Comment</span> <span class="n">tokens</span> <span class="n">are</span> <span class="n">filtered</span> <span class="n">out</span> <span class="n">by</span> <span class="n">the</span> <span class="n">generated</span> <span class="n">scanner</span><span class="o">.</span>
+
+<span class="o">*</span><span class="p">)</span>
+
+
+<span class="n">identifier</span> <span class="o">=</span> <span class="n">letter</span><span class="o">.</span><span class="p">(</span><span class="n">letter</span><span class="o">|</span><span class="n">digit</span><span class="p">)</span><span class="o">*</span><span class="p">;</span>
+<span class="n">integer</span> <span class="o">=</span> <span class="n">digit</span><span class="o">.</span><span class="n">digit</span><span class="o">*</span><span class="p">;</span>
+<span class="s1">&#39;&gt;=&#39;</span><span class="p">;</span>
+<span class="s1">&#39;&lt;=&#39;</span><span class="p">;</span>
+<span class="s1">&#39;==&#39;</span><span class="p">;</span>
+<span class="s1">&#39;!=&#39;</span><span class="p">;</span>
+<span class="s1">&#39;&gt;&#39;</span><span class="p">;</span>
+<span class="s1">&#39;&lt;&#39;</span><span class="p">;</span>
+<span class="s1">&#39;=&#39;</span><span class="p">;</span>
+<span class="s1">&#39;(&#39;</span><span class="p">;</span>
+<span class="s1">&#39;)&#39;</span><span class="p">;</span>
+<span class="s1">&#39;+&#39;</span><span class="p">;</span>
+<span class="s1">&#39;-&#39;</span><span class="p">;</span>
+<span class="s1">&#39;*&#39;</span><span class="p">;</span>
+<span class="s1">&#39;/&#39;</span><span class="p">;</span>
+<span class="s1">&#39;[&#39;</span><span class="p">;</span>
+<span class="s1">&#39;]&#39;</span><span class="p">;</span>
+<span class="s1">&#39;{&#39;</span><span class="p">;</span>
+<span class="s1">&#39;}&#39;</span><span class="p">;</span>
+<span class="s1">&#39;,&#39;</span><span class="p">;</span>
+<span class="s1">&#39;;&#39;</span><span class="p">;</span>
+<span class="n">stringconst</span> <span class="o">=</span> <span class="p">(</span><span class="n">quote</span> <span class="o">.</span> <span class="n">anycharbutquote</span><span class="o">*</span> <span class="o">.</span> <span class="n">quote</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">doublequote</span> <span class="o">.</span> <span class="n">anycharbutdoublequote</span><span class="o">*</span> <span class="o">.</span> <span class="n">doublequote</span><span class="p">);</span>
+<span class="n">comment</span> <span class="o">=</span> <span class="n">pound</span> <span class="o">.</span> <span class="n">anycharbutnewline</span><span class="o">*</span><span class="p">;</span>
+<span class="n">endoffile</span> <span class="o">=</span> <span class="n">EOF</span><span class="p">;</span>
+
+<span class="c1">#DEFINITIONS</span>
+
+<span class="kn">from</span> <span class="nn">jpythonbackend</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1">#PRODUCTIONS</span>
+
+<span class="n">Program</span> <span class="p">::</span><span class="o">=</span> <span class="n">Block</span> <span class="n">endoffile</span>                                             <span class="p">(</span><span class="n">JBlock</span><span class="p">(</span><span class="n">Block</span><span class="p">));</span>
+
+<span class="n">Block</span> <span class="p">::</span><span class="o">=</span> <span class="n">FunDecs</span> <span class="n">VarDecs</span> <span class="n">Statements</span>                                    <span class="p">((</span><span class="n">FunDecs</span><span class="p">,</span><span class="n">VarDecs</span><span class="p">,</span><span class="n">Statements</span><span class="p">));</span>
+
+<span class="n">FunDecs</span> <span class="p">::</span><span class="o">=</span> <span class="n">null</span>                                                        <span class="p">([]);</span>
+          <span class="o">|</span> <span class="s1">&#39;def&#39;</span> <span class="n">identifier</span> <span class="s1">&#39;(&#39;</span> <span class="n">ArgList</span> <span class="s1">&#39;)&#39;</span> <span class="n">CompoundStmt</span> <span class="n">FunDecs</span>       <span class="p">([</span><span class="n">JFundec</span><span class="p">(</span><span class="n">identifier</span><span class="p">,</span> <span class="n">ArgList</span><span class="p">,</span><span class="n">CompoundStatement</span><span class="p">)]</span><span class="o">+</span><span class="n">FunDecs</span><span class="p">);</span>
+
+<span class="n">VarDecs</span> <span class="p">::</span><span class="o">=</span> <span class="n">null</span>                                                        <span class="p">([]);</span>
+          <span class="o">|</span> <span class="s1">&#39;decl&#39;</span> <span class="n">identifier</span> <span class="s1">&#39;;&#39;</span> <span class="n">VarDecs</span>                               <span class="p">([</span><span class="n">JDecl</span><span class="p">(</span><span class="n">identifier</span><span class="p">)]</span><span class="o">+</span><span class="n">VarDecs</span><span class="p">);</span>
+
+<span class="n">Statements</span> <span class="p">::</span><span class="o">=</span> <span class="n">null</span>                                                     <span class="p">([]);</span>
+             <span class="o">|</span> <span class="n">TerminatedStatement</span> <span class="n">Statements</span>                           <span class="p">([</span><span class="n">TerminatedStatement</span><span class="p">]</span><span class="o">+</span><span class="n">Statements</span><span class="p">);</span>
+
+<span class="n">TerminatedStatement</span> <span class="p">::</span><span class="o">=</span> <span class="n">Statement</span> <span class="s1">&#39;;&#39;</span>                                   <span class="p">(</span><span class="n">Statement</span><span class="p">);</span>
+
+<span class="n">CompoundStmt</span> <span class="p">::</span><span class="o">=</span> <span class="s1">&#39;{&#39;</span> <span class="n">Block</span> <span class="s1">&#39;}&#39;</span>                                          <span class="p">(</span><span class="n">JBlock</span><span class="p">(</span><span class="n">Block</span><span class="p">));</span>
+
+<span class="n">Statement</span> <span class="p">::</span><span class="o">=</span> <span class="n">AssignmentStmt</span>                                            <span class="p">(</span><span class="n">AssignmentStmt</span><span class="p">);</span>
+            <span class="o">|</span> <span class="n">ReturnStmt</span>                                                <span class="p">(</span><span class="n">ReturnStmt</span><span class="p">);</span>
+            <span class="o">|</span> <span class="n">IfStmt</span>                                                    <span class="p">(</span><span class="n">IfStmt</span><span class="p">);</span>
+            <span class="o">|</span> <span class="n">WhileStmt</span>                                                 <span class="p">(</span><span class="n">WhileStmt</span><span class="p">);</span>
+            <span class="o">|</span> <span class="n">ForStmt</span>                                                   <span class="p">(</span><span class="n">ForStmt</span><span class="p">);</span>
+            <span class="o">|</span> <span class="n">CompoundStmt</span>                                              <span class="p">(</span><span class="n">CompoundStmt</span><span class="p">);</span>
+
+<span class="n">AssignmentStmt</span> <span class="p">::</span><span class="o">=</span> <span class="n">identifier</span> <span class="s1">&#39;=&#39;</span> <span class="n">Expression</span>                            <span class="p">(</span><span class="n">JAssign</span><span class="p">(</span><span class="n">identifier</span><span class="p">,</span><span class="n">Expression</span><span class="p">));</span>
+
+<span class="n">ReturnStmt</span> <span class="p">::</span><span class="o">=</span> <span class="s1">&#39;return&#39;</span> <span class="n">OptionalExpression</span>                              <span class="p">(</span><span class="n">JReturn</span><span class="p">(</span><span class="n">OptionalExpression</span><span class="p">));</span>
+
+<span class="n">OptionalExpression</span> <span class="p">::</span><span class="o">=</span> <span class="n">null</span>                                             <span class="p">(</span><span class="bp">None</span><span class="p">);</span>
+                     <span class="o">|</span> <span class="n">Expression</span>                                       <span class="p">(</span><span class="n">Expression</span><span class="p">);</span>
+
+<span class="n">IfStmt</span> <span class="p">::</span><span class="o">=</span> <span class="s1">&#39;if&#39;</span> <span class="s1">&#39;(&#39;</span> <span class="n">Expression</span> <span class="s1">&#39;)&#39;</span> <span class="n">Statement</span> <span class="n">OptionalElse</span>               <span class="p">(</span><span class="n">If</span><span class="p">(</span><span class="n">Expression</span><span class="p">,</span><span class="n">Statement</span><span class="p">,</span><span class="n">OptionalElse</span><span class="p">));</span>
+
+<span class="n">OptionalElse</span> <span class="p">::</span><span class="o">=</span> <span class="n">null</span>                                                   <span class="p">(</span><span class="n">Pass</span><span class="p">);</span>
+               <span class="o">|</span> <span class="s1">&#39;else&#39;</span> <span class="n">Statement</span>                                       <span class="p">(</span><span class="n">Statement</span><span class="p">);</span>
+
+<span class="n">WhileStmt</span> <span class="p">::</span><span class="o">=</span> <span class="s1">&#39;while&#39;</span> <span class="s1">&#39;(&#39;</span> <span class="n">Expression</span> <span class="s1">&#39;)&#39;</span> <span class="n">Statement</span>                      <span class="p">(</span><span class="n">While</span><span class="p">(</span><span class="n">Expression</span><span class="p">,</span><span class="n">Statement</span><span class="p">));</span>
+
+<span class="n">ForStmt</span> <span class="p">::</span><span class="o">=</span> <span class="s1">&#39;for&#39;</span> <span class="n">identifier</span> <span class="s1">&#39;in&#39;</span> <span class="n">Expression</span> <span class="n">Statement</span>                  <span class="p">(</span><span class="n">For</span><span class="p">(</span><span class="n">identifier</span><span class="p">,</span><span class="n">Expression</span><span class="p">,</span><span class="n">Statement</span><span class="p">));</span>
+
+<span class="n">Expression</span> <span class="p">::</span><span class="o">=</span> <span class="n">Expression</span> <span class="s1">&#39;or&#39;</span> <span class="n">AndExpression</span>                            <span class="p">(</span><span class="n">OrExpr</span><span class="p">(</span><span class="n">Expression</span><span class="p">,</span><span class="n">AndExpression</span><span class="p">));</span>
+             <span class="o">|</span> <span class="n">AndExpression</span>                                            <span class="p">(</span><span class="n">AndExpression</span><span class="p">);</span>
+
+<span class="n">AndExpression</span> <span class="p">::</span><span class="o">=</span> <span class="n">AndExpression</span> <span class="s1">&#39;and&#39;</span> <span class="n">NotExpression</span>                     <span class="p">(</span><span class="n">AndExpr</span><span class="p">(</span><span class="n">AndExpression</span><span class="p">,</span><span class="n">NotExpression</span><span class="p">));</span>
+                <span class="o">|</span> <span class="n">NotExpression</span>                                         <span class="p">(</span><span class="n">NotExpression</span><span class="p">);</span>
+
+<span class="n">NotExpression</span> <span class="p">::</span><span class="o">=</span> <span class="s1">&#39;not&#39;</span> <span class="n">RelExpression</span>                                   <span class="p">(</span><span class="n">NotExpr</span><span class="p">(</span><span class="n">RelExpression</span><span class="p">));</span>
+                <span class="o">|</span> <span class="n">RelExpression</span>                                         <span class="p">(</span><span class="n">RelExpression</span><span class="p">);</span>
+
+<span class="n">RelExpression</span> <span class="p">::</span><span class="o">=</span> <span class="n">NumExpression</span> <span class="n">RelOp</span> <span class="n">NumExpression</span>                     <span class="p">(</span><span class="n">relexpr</span><span class="p">(</span><span class="n">RelOp</span><span class="p">,</span><span class="n">NumExpression1</span><span class="p">,</span><span class="n">NumExpression2</span><span class="p">));</span>
+                <span class="o">|</span> <span class="n">NumExpression</span>                                         <span class="p">(</span><span class="n">NumExpression</span><span class="p">);</span>
+
+<span class="n">RelOp</span> <span class="p">::</span><span class="o">=</span> <span class="s1">&#39;&gt;=&#39;</span>                                                          <span class="p">(</span><span class="s1">&#39;&gt;=&#39;</span><span class="p">);</span>
+        <span class="o">|</span> <span class="s1">&#39;&lt;=&#39;</span>                                                          <span class="p">(</span><span class="s1">&#39;&lt;=&#39;</span><span class="p">);</span>
+        <span class="o">|</span> <span class="s1">&#39;&gt;&#39;</span>                                                           <span class="p">(</span><span class="s1">&#39;&gt;&#39;</span><span class="p">);</span>
+        <span class="o">|</span> <span class="s1">&#39;&lt;&#39;</span>                                                           <span class="p">(</span><span class="s1">&#39;&lt;&#39;</span><span class="p">);</span>
+        <span class="o">|</span> <span class="s1">&#39;==&#39;</span>                                                          <span class="p">(</span><span class="s1">&#39;==&#39;</span><span class="p">);</span>
+        <span class="o">|</span> <span class="s1">&#39;!=&#39;</span>                                                          <span class="p">(</span><span class="s1">&#39;!=&#39;</span><span class="p">);</span>
+
+<span class="n">NumExpression</span> <span class="p">::</span><span class="o">=</span> <span class="n">NumExpression</span> <span class="s1">&#39;+&#39;</span> <span class="n">Term</span>                                <span class="p">(</span><span class="n">AddExpr</span><span class="p">(</span><span class="n">NumExpression</span><span class="p">,</span><span class="n">Term</span><span class="p">));</span>
+                <span class="o">|</span> <span class="n">NumExpression</span> <span class="s1">&#39;-&#39;</span> <span class="n">Term</span>                                <span class="p">(</span><span class="n">SubExpr</span><span class="p">(</span><span class="n">NumExpression</span><span class="p">,</span><span class="n">Term</span><span class="p">));</span>
+                <span class="o">|</span> <span class="n">Term</span>                                                  <span class="p">(</span><span class="n">Term</span><span class="p">);</span>
+
+<span class="n">Term</span> <span class="p">::</span><span class="o">=</span> <span class="n">Term</span> <span class="s1">&#39;*&#39;</span> <span class="n">Factor</span>                                                <span class="p">(</span><span class="n">mulexpr</span><span class="p">(</span><span class="n">Term</span><span class="p">,</span><span class="n">Factor</span><span class="p">));</span>
+       <span class="o">|</span> <span class="n">Term</span> <span class="s1">&#39;/&#39;</span> <span class="n">Factor</span>                                                <span class="p">(</span><span class="n">divexpr</span><span class="p">(</span><span class="n">Term</span><span class="p">,</span><span class="n">Factor</span><span class="p">));</span>
+       <span class="o">|</span> <span class="n">Factor</span>                                                         <span class="p">(</span><span class="n">Factor</span><span class="p">);</span>
+
+<span class="n">Factor</span> <span class="p">::</span><span class="o">=</span> <span class="n">identifier</span>                                                   <span class="p">(</span><span class="n">identexpr</span><span class="p">(</span><span class="n">identifier</span><span class="p">));</span>
+         <span class="o">|</span> <span class="n">integer</span>                                                      <span class="p">(</span><span class="n">intexpr</span><span class="p">(</span><span class="n">integer</span><span class="p">));</span>
+         <span class="o">|</span> <span class="n">FunCall</span>                                                      <span class="p">(</span><span class="n">FunCall</span><span class="p">);</span>
+         <span class="o">|</span> <span class="s1">&#39;(&#39;</span> <span class="n">ExpressionList</span> <span class="s1">&#39;)&#39;</span>                                       <span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">ExpressionList</span><span class="p">));</span>
+         <span class="o">|</span> <span class="s1">&#39;True&#39;</span>                                                       <span class="p">(</span><span class="n">boolexpr</span><span class="p">(</span><span class="bp">True</span><span class="p">));</span>
+         <span class="o">|</span> <span class="s1">&#39;False&#39;</span>                                                      <span class="p">(</span><span class="n">boolexpr</span><span class="p">(</span><span class="bp">False</span><span class="p">));</span>
+         <span class="o">|</span> <span class="n">stringconst</span>                                                  <span class="p">(</span><span class="n">strexpr</span><span class="p">(</span><span class="n">stringconst</span><span class="p">));</span>
+
+<span class="n">FunCall</span> <span class="p">::</span><span class="o">=</span> <span class="n">identifier</span> <span class="s1">&#39;(&#39;</span> <span class="n">ArgList</span> <span class="s1">&#39;)&#39;</span>                                  <span class="p">(</span><span class="n">funcall</span><span class="p">(</span><span class="n">identifier</span><span class="p">,</span><span class="n">ArgList</span><span class="p">));</span>
+
+<span class="n">ArgList</span> <span class="p">::</span><span class="o">=</span> <span class="n">null</span>                                                        <span class="p">([]);</span>
+          <span class="o">|</span> <span class="n">ExpressionList</span>                                              <span class="p">(</span><span class="n">ExpressionList</span><span class="p">);</span>
+
+<span class="n">ExpressionList</span> <span class="p">::</span><span class="o">=</span> <span class="n">Expression</span>                                           <span class="p">([</span><span class="n">Expression</span><span class="p">]);</span>
+                 <span class="o">|</span> <span class="n">Expression</span> <span class="n">comma</span> <span class="n">ExpressionList</span>                      <span class="p">([</span><span class="n">Expression</span><span class="p">]</span><span class="o">+</span><span class="n">ExpressionList</span><span class="p">);</span>
+
+<span class="n">IdentList</span> <span class="p">::</span><span class="o">=</span> <span class="n">identifier</span>                                                <span class="p">([</span><span class="n">identifier</span><span class="p">]);</span>
+            <span class="o">|</span> <span class="n">identifier</span> <span class="s1">&#39;,&#39;</span> <span class="n">IdentList</span>                                  <span class="p">([</span><span class="n">identifier</span><span class="p">]</span><span class="o">+</span><span class="n">IdentList</span><span class="p">);</span>
+
+<span class="c1">#END</span>
+</pre></div>
+</td></tr></table></div>
+<p><strong>Fig. 2.6: A Scangen Input File - jpython.txt</strong></p>
+</div>
+</div>
+<div class="section" id="nfa-to-dfa-conversion">
+<h2>2.7. NFA to DFA Conversion<a class="headerlink" href="#nfa-to-dfa-conversion" title="Permalink to this headline">¶</a></h2>
+<p>This is slight variation of the algorithm presented on page 59 of Linz, 5th edition.</p>
+<div class="section" id="the-function">
+<h3>2.7.1. The <img class="math" src="../../_images/math/8925a21857ac06f81d437f2ee13512287622530b.png" alt="\epsilon Closure"/> Function<a class="headerlink" href="#the-function" title="Permalink to this headline">¶</a></h3>
+<p>In this version of the algorithm we define a function called <img class="math" src="../../_images/math/8925a21857ac06f81d437f2ee13512287622530b.png" alt="\epsilon Closure"/> that given a set of states of an NFA returns the set of states that can be reached on epsilon transitions from the given set of states.</p>
+<p>The closure set can be computed by starting with a stack of the given set of states. Then the stack is repeatedly popped until it is empty. Each time a state is popped any states that can be reached from the popped state on an <img class="math" src="../../_images/math/65d19c66c148d5016c6a89d26486bf6d1966ded1.png" alt="\epsilon"/> transition, and that are not yet in the closure set, are pushed onto the stack and added to the closure set. Once the stack is emptied there are no more <img class="math" src="../../_images/math/65d19c66c148d5016c6a89d26486bf6d1966ded1.png" alt="\epsilon"/> reachable states from the original given set of states and the <img class="math" src="../../_images/math/65d19c66c148d5016c6a89d26486bf6d1966ded1.png" alt="\epsilon"/>-closed set is returned.</p>
+</div>
+<div class="section" id="the-nfa-to-dfa-algorithm">
+<h3>2.7.2. The NFA to DFA Algorithm<a class="headerlink" href="#the-nfa-to-dfa-algorithm" title="Permalink to this headline">¶</a></h3>
+<p>For <img class="math" src="../../_images/math/fc370b5d0ce730371b59d517b4e9a3cec8712439.png" alt="NFA = (Q,\Sigma,\delta,q_0,F)"/> we can form a DFA by starting with <img class="math" src="../../_images/math/142e8e68f33a2e23bd14df56a0dbb5a0c241026d.png" alt="\epsilon Closure(\{q_0\})"/> as the start state of the DFA. We may wish to simply make a mapping from a DFA state id to the set of NFA states it represents and another mapping from NFA state sets to the DFA state it represents. For the mapping from NFA state sets to DFA states you will need to use frozenset in Python because only immutable values may be used as keys in a dictionary. We put this DFA state on a stack of unexplored states.</p>
+<p>To complete the DFA we do the following:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>We pop a DFA state from the stack of unexplored states.</li>
+<li>We form a new set of NFA states as described in step 2 of the algorithm on page 59 of Linz. Remember to form the <img class="math" src="../../_images/math/8925a21857ac06f81d437f2ee13512287622530b.png" alt="\epsilon Closure"/> of the new states. If the newly formed set of NFA states already exists in the DFA we form a transition from the current state to the DFA state corresponding to the set of NFA states we just found.</li>
+<li>If the newly formed state (i.e. set of NFA states) does not exist in the DFA then we add a new state to the DFA and form a transition from the current state to the newly formed state. We also add the new state to the stack of unexplored states.</li>
+</ol>
+</div></blockquote>
+<p>When we have emptied the stack we have formed the DFA. The start state of the DFA contains the start state of the NFA. Accepting states of the DFA contain an accepting state of the original NFA.</p>
+</div>
+<div class="section" id="example-calculator-language">
+<h3>2.7.3. Example Calculator Language<a class="headerlink" href="#example-calculator-language" title="Permalink to this headline">¶</a></h3>
+<p>Consider a calculator language that has the ability to store and recall from a memory location. It can also get input from the keyboard, it has the ability to add, subtract, multiply, and divide. Finally it can raise a number to an exponent. The tokens of this language might be parens, s for store, r for recall, i for reading an input value, numeric operators (i.e. +,-,*,/), numbers, and the carat (i.e. ^) for raising a value to an exponent. <a class="reference external" href="http://cs.luther.edu/~leekent/ComputationalModels/examplefiles/calculatornfa.txt">An NFA to recognize these tokens is provided here</a>. A description of the NFA for this calculator language is provided here.</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+ 10
+ 11
+ 12
+ 13
+ 14
+ 15
+ 16
+ 17
+ 18
+ 19
+ 20
+ 21
+ 22
+ 23
+ 24
+ 25
+ 26
+ 27
+ 28
+ 29
+ 30
+ 31
+ 32
+ 33
+ 34
+ 35
+ 36
+ 37
+ 38
+ 39
+ 40
+ 41
+ 42
+ 43
+ 44
+ 45
+ 46
+ 47
+ 48
+ 49
+ 50
+ 51
+ 52
+ 53
+ 54
+ 55
+ 56
+ 57
+ 58
+ 59
+ 60
+ 61
+ 62
+ 63
+ 64
+ 65
+ 66
+ 67
+ 68
+ 69
+ 70
+ 71
+ 72
+ 73
+ 74
+ 75
+ 76
+ 77
+ 78
+ 79
+ 80
+ 81
+ 82
+ 83
+ 84
+ 85
+ 86
+ 87
+ 88
+ 89
+ 90
+ 91
+ 92
+ 93
+ 94
+ 95
+ 96
+ 97
+ 98
+ 99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168</pre></div></td><td class="code"><div class="highlight"><pre><span></span>The start state is: 0
+
+STATE     ON CLASS     GO TO     ACCEPTS
+-----     --------     -----     -------
+    0
+           EPSILON        31
+           EPSILON        33
+           EPSILON        35
+           EPSILON        37
+           EPSILON        39
+           EPSILON        41
+           EPSILON        43
+           EPSILON        45
+           EPSILON        47
+           EPSILON        49
+           EPSILON        51
+
+    1
+             digit         2
+
+    2
+           EPSILON         5
+
+    3
+             digit         4
+
+    4
+           EPSILON         6
+
+    5
+           EPSILON         3
+           EPSILON         6
+
+    6
+           EPSILON         5
+           EPSILON         8
+
+    7
+           EPSILON         1
+
+    8
+           EPSILON        19
+
+    9
+            period        10
+
+   10
+           EPSILON        11
+
+   11
+             digit        12
+
+   12
+           EPSILON        14
+
+   13
+           EPSILON         9
+
+   14
+           EPSILON        17
+
+   15
+             digit        16
+
+   16
+           EPSILON        18
+
+   17
+           EPSILON        15
+           EPSILON        18
+
+   18
+           EPSILON        17
+           EPSILON        20
+
+   19
+           EPSILON        13
+
+   20
+           EPSILON        22
+
+   21
+           EPSILON         7
+
+   22
+           EPSILON        32
+
+   23
+             digit        24
+
+   24
+           EPSILON        27
+
+   25
+             digit        26
+
+   26
+           EPSILON        28
+
+   27
+           EPSILON        25
+           EPSILON        28
+
+   28
+           EPSILON        27
+           EPSILON        30
+
+   29
+           EPSILON        23
+
+   30
+           EPSILON        32
+
+   31
+           EPSILON        21
+           EPSILON        29
+
+   32                               yes
+
+   33
+                 s        34
+
+   34                               yes
+
+   35
+                 r        36
+
+   36                               yes
+
+   37
+                 i        38
+
+   38                               yes
+
+   39
+                 (        40
+
+   40                                yes
+
+   41
+                 )        42
+
+   42                                yes
+
+   43
+                 +        44
+
+   44                                yes
+
+   45
+                 *        46
+
+   46                                yes
+
+   47
+                 /        48
+
+   48                                yes
+
+   49
+                 -        50
+
+   50                                yes
+
+   51
+                 ^        52
+
+   52                                yes
+</pre></div>
+</td></tr></table></div>
+</div></blockquote>
+<p>The DFA that results from converting this NFA to a DFA using the algorithm presented in this section looks like this. This assumes that accepting states that accept different values cannot be merged into one accepting state but must remain separate.</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53</pre></div></td><td class="code"><div class="highlight"><pre><span></span>The start state is: 0
+
+STATE     ON CLASS     GO TO     ACCEPTS
+-----     --------     -----     -------
+    0
+                 (         1
+                 )         2
+                 *         3
+                 +         4
+                 -         5
+                 /         6
+                 ^         7
+             digit         8
+                 i         9
+                 r        10
+                 s        11
+
+    1                             yes
+
+    2                             yes
+
+    3                             yes
+
+    4                             yes
+
+    5                             yes
+
+    6                             yes
+
+    7                             yes
+
+    8                             yes
+             digit        12
+            period        13
+
+    9                             yes
+
+   10                             yes
+
+   11                             yes
+
+   12                             yes
+             digit        12
+            period        13
+
+   13
+             digit        14
+
+   14                             yes
+             digit        15
+
+   15                             yes
+             digit        15
+</pre></div>
+</td></tr></table></div>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="dfa-minimization">
+<h2>2.8. DFA Minimization<a class="headerlink" href="#dfa-minimization" title="Permalink to this headline">¶</a></h2>
+<p>It is possible to minimize the number of states required for a DFA. The minimization algorithm proceeds by making two initial states: one containing all non-final states and one containing all final states. We’ll call these two initial state sets <em>partitions</em>. A procedure called <em>finer</em> is called repeatedly on each partition to split the partitions into progressively smaller and smaller partitions until no more partitions are created.</p>
+<div class="section" id="the-finer-function">
+<h3>2.8.1. The Finer Function<a class="headerlink" href="#the-finer-function" title="Permalink to this headline">¶</a></h3>
+<p>Finer is given a partition identifier, identifying one partition of the original set of states. <em>Finer</em> proceeds by looking at each transition for all states within the partition. One dfa state is picked from the partition as the <em>primary</em> state. If a transition is found on a class of characters that goes to a partition that differs from the <em>primary</em> state’s partition on the same transition class, the two states are distinguishable and the <em>secondary</em> state is added to a set of distinquished states.</p>
+<p>After going through all the alphabet symbols (i.e. classes of characters) in the partition, if the set of distinquished states is not empty then all the newly discovered distinquished states are added to a new partition and removed from the current partition. If a new partition was created, <em>finer</em> returns true. Otherwise it returns false.</p>
+</div>
+<div class="section" id="example-minimal-dfa">
+<h3>2.8.2. Example Minimal DFA<a class="headerlink" href="#example-minimal-dfa" title="Permalink to this headline">¶</a></h3>
+<p>The example DFA from the previous section is <a class="reference external" href="http://cs.luther.edu/~leekent/ComputationalModels/examplefiles/calculatordfa.txt">defined by the Python code found here</a>. The minimized DFA for the DFA presented in the previous section is given below.</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28</pre></div></td><td class="code"><div class="highlight"><pre><span></span>The start state is: 0
+
+STATE     ON CLASS     GO TO     ACCEPTS
+-----     --------     -----     -------
+    0
+                 (         1
+                 )         1
+                 *         1
+                 +         1
+                 -         1
+                 /         1
+                 ^         1
+             digit         3
+                 i         1
+                 r         1
+                 s         1
+
+    1                             yes
+
+    2
+             digit         4
+
+    3                             yes
+             digit         3
+            period         2
+
+    4                             yes
+             digit         4
+</pre></div>
+</td></tr></table></div>
+</div></blockquote>
+<p><em>Finer</em> finds that it needs to split when considering the transitions in this order (for example):</p>
+<blockquote>
+<div><ul class="simple">
+<li>found a difference on ( from state 0</li>
+<li>found a difference on ) from state 0</li>
+<li>found a difference on * from state 0</li>
+<li>found a difference on + from state 0</li>
+<li>found a difference on - from state 0</li>
+<li>found a difference on / from state 0</li>
+<li>found a difference on ^ from state 0</li>
+<li>found a difference on i from state 0</li>
+<li>found a difference on r from state 0</li>
+<li>found a difference on s from state 0</li>
+<li>found a difference on digit from state 1</li>
+<li>found a difference on period from state 1</li>
+<li>found a difference on digit from state 1</li>
+<li>found a difference on period from state 1</li>
+<li>found a difference on digit from state 1</li>
+<li>found a difference on digit from state 1</li>
+<li>found a difference on period from state 3</li>
+<li>found a difference on period from state 3</li>
+</ul>
+</div></blockquote>
+<p>While the ordering of splits might be random, the minimal DFA generated is not random. The same resulting minimized DFA will always result from the minimization algorithm.</p>
+</div>
+</div>
+<div class="section" id="regular-expressions-to-nfas">
+<h2>2.9. Regular Expressions To NFAs<a class="headerlink" href="#regular-expressions-to-nfas" title="Permalink to this headline">¶</a></h2>
+<p>An NFA can be built from a regular expression as described in the text. This is a description of how to take an input file describing tokens of a programming language by regular expressions and turn it into a NFA for recognizing those tokens. Consider the following description of a programming language.</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93</pre></div></td><td class="code"><div class="highlight"><pre><span></span>(* Comments for the scangen input file appear
+   within paren asterisk pairs as shown here. *)
+
+#CLASSES
+
+
+(* The classes defines classes of ASCII character codes. All
+   supported variants of the class definitions are shown here.
+   The ^ operator means that the class includes all ASCII
+   codes (i.e. 0 to 255) that are NOT the given character
+   codes. The names of the classes below describe their
+   true nature.
+*)
+
+anycharbutnewline = ^10..13;
+anycharbutquote = ^39;
+anycharbutdoublequote = ^&#39;&quot;&#39;;
+quote = 39;
+doublequote = &#39;&quot;&#39;;
+pound = &#39;#&#39;;
+letter  = &#39;A&#39;..&#39;Z&#39;, &#39;a&#39;..&#39;z&#39;;
+digit   = &#39;0&#39;..&#39;9&#39;;
+EOF     = 3;
+
+#KEYWORDS
+
+(* Keywords are optional but define the identifier tokens that should
+   be recognized as keywords and not identifiers.
+
+   The number is a token identifier that may be used instead of the actual
+   string to identify the keyword. Constants like the name def_keyword
+   are defined by scangen for each keyword identifier in the generated scanner.
+
+   Tokens print, range, True, False are all bindings that exist during code
+   generation so are not recognized as keywords.
+*)
+
+&#39;def&#39;;
+&#39;if&#39;;
+&#39;while&#39;;
+&#39;len&#39;;
+&#39;and&#39;;
+&#39;not&#39;;
+&#39;or&#39;;
+&#39;return&#39;;
+&#39;in&#39;;
+&#39;None&#39;;
+&#39;for&#39;;
+&#39;else&#39;;
+&#39;decl&#39;;
+&#39;True&#39;;
+&#39;False&#39;;
+
+
+#TOKENS
+
+(* The identifier token must be the first token defined in this list for the keyword
+   definitions given above.
+
+   The token identifier numbers also have constants defined for them like the name
+   identifier_token for instance. These names are created by the scangen program in the
+   generated scanner.
+
+   The name &quot;comment&quot; is a special name. If used, it represents comments that are to be
+   ignored by the scanner. Comment tokens are filtered out by the generated scanner.
+
+*)
+
+
+identifier = letter.(letter|digit)*;
+integer = digit.digit*;
+&#39;&gt;=&#39;;
+&#39;&lt;=&#39;;
+&#39;==&#39;;
+&#39;!=&#39;;
+&#39;&gt;&#39;;
+&#39;&lt;&#39;;
+&#39;=&#39;;
+&#39;(&#39;;
+&#39;)&#39;;
+&#39;+&#39;;
+&#39;-&#39;;
+&#39;*&#39;;
+&#39;/&#39;;
+&#39;[&#39;;
+&#39;]&#39;;
+&#39;{&#39;;
+&#39;}&#39;;
+&#39;,&#39;;
+&#39;;&#39;;
+stringconst = (quote . anycharbutquote* . quote) | (doublequote . anycharbutdoublequote* . doublequote);
+comment = pound . anycharbutnewline*;
+endoffile = EOF;
+</pre></div>
+</td></tr></table></div>
+</div></blockquote>
+<p>The tokens for this language are described by regular expressions in the <em>#Tokens</em> section of the input file. These regular expressions either start with a token name, like <em>identifier</em> or they are given as a string of characters. Either way, these regular expressions may be converted into NFA’s by the execution of an infix evaluator for regular expressions. The algorithm is presented below.</p>
+<div class="section" id="the-algorithm">
+<h3>2.9.1. The Algorithm<a class="headerlink" href="#the-algorithm" title="Permalink to this headline">¶</a></h3>
+<p>The algorithm uses two stacks, an operator stack and an operand stack. The operator stack will hold operators and left parens. The operand stack holds NFAs which are composed of a tuples of states consisting of a start and stop state for each NFA.</p>
+<p>The algorithm proceeds by scanning the infix expression as a string from left to right getting the tokens from the string. The tokens represent classes of characters and operators (including parens).</p>
+<p>Each operator has a precedence associated with it. The Kleene Star has the highest precedence while <em>follows</em> (i.e. the period or juxtaposition) has the next lower precedence followed by <em>choice</em> (i.e. the + or the |) with the next lower precedence. Finally the left paren and right paren precedence are the lowest in precedence.</p>
+<p>To begin the operandStack and the operatorStack are created and a left paren is pushed on the operator stack.</p>
+<p>We read a regular expression from the input file given above. We will call each input symbol of the regular expression a token. If the token is not a semicolon we perform the following steps:</p>
+<blockquote>
+<div><ul class="simple">
+<li>If the token is an operator then we need to operate on the two stacks with the given operator.</li>
+<li>If the token is a character class then we form an NFA with two states and push the NFA’s start and stop states on the operand stack as a tuple.</li>
+</ul>
+</div></blockquote>
+<p>After scanning all the input and operating when required we operate on the stacks one more time with the two stacks and a right paren operator. At this point the operator stack should be empty and the operand stack should have one number on it which is the result. You pop the operand stack to get the NFA for that regular expression.</p>
+</div>
+<div class="section" id="the-operate-function">
+<h3>2.9.2. The Operate Function<a class="headerlink" href="#the-operate-function" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>My suggestion is to write this as a separate function in your program. The operate function is passed an operator and the operator stack and operand stack as arguments. To operate we do the following. If the given operator is a left paren we push it on the operator stack and return. Otherwise, while the precedence of the given operator is less than or equal to the precedence of the top operator on the operator stack we do the following:</dt>
+<dd><ol class="first last arabic simple">
+<li>Pop the top operator from the operator stack. Call this the topOp.</li>
+<li>If the topOp is a Kleene Star, choice, or follows operator then operate on the operand stack by popping the operands, forming a new NFA with possible epsilon transitions, and pushing the resulting NFA’s starting and ending states as a tuple.</li>
+<li>If the topOp is a left paren then the given operator should be a right paren. If so, we are done operating so simply return from the operate procedure at that point discarding the right paren.</li>
+</ol>
+</dd>
+</dl>
+<p>When the precedence of the operator is greater than the precedence of the topOp the loop terminates and we push the given operator on the operator stack before returning from operating.</p>
+<p>This finishes the operate function and the infix evaluator. Each NFA is built by the program and one new state with epsilon transitions to each of the starting states of the regular expressions is constructed to build one NFA for all the regular expressions specified in the input file.</p>
+</div>
+<div class="section" id="reading-the-input">
+<h3>2.9.3. Reading the Input<a class="headerlink" href="#reading-the-input" title="Permalink to this headline">¶</a></h3>
+<p>Reading the regular expression input can be accomplished using the StreamReader class. Because reading the input can be a little daunting at first, a <a class="reference external" href="http://cs.luther.edu/~leekent/ComputationalModels/examplefiles/RE2NFA.py">shell program called RE2NFA.py</a> is provided to aid you in reading the input. You still must write a little of the code to read the regular expressions themselves, but you have plenty of sample code to look at in the shell program to see how to use the StreamReader object called <em>reader</em> in the code.</p>
+</div>
+</div>
+<div class="section" id="programming-exercises">
+<h2>2.10. Programming Exercises<a class="headerlink" href="#programming-exercises" title="Permalink to this headline">¶</a></h2>
+<p>Here are a few programming exercises that go along with chapter 2 of the text.</p>
+<blockquote>
+<div><ol class="arabic">
+<li><p class="first">Build a DFA for the finite state machine presented in figure 2.7 of the text. You should implement a class called FiniteStateMachine that takes a dictionary of states as input to its constructor along with an integer indicating its start state. For example, the code below would create a Finite State Machine for the DFA in figure 2.1 of the text.</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">state</span>
+<span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">streamreader</span>
+
+<span class="k">class</span> <span class="nc">FiniteStateMachine</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">startStateId</span><span class="p">,</span> <span class="n">classes</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="n">states</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">startStateId</span> <span class="o">=</span> <span class="n">startStateId</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classes</span> <span class="o">=</span> <span class="n">classes</span>
+
+        <span class="k">for</span> <span class="n">stateId</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">stateId</span><span class="p">]</span><span class="o">.</span><span class="n">setClasses</span><span class="p">(</span><span class="n">classes</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">accepts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strm</span><span class="p">):</span>
+        <span class="k">pass</span> <span class="c1"># You must complete this function</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+
+    <span class="n">q0</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">State</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">q1</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">State</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">q2</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">State</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">classes</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;zero&quot;</span><span class="p">:</span><span class="nb">frozenset</span><span class="p">(</span><span class="s2">&quot;0&quot;</span><span class="p">),</span> <span class="s2">&quot;one&quot;</span><span class="p">:</span><span class="nb">frozenset</span><span class="p">(</span><span class="s2">&quot;1&quot;</span><span class="p">)}</span>
+
+    <span class="n">q0</span><span class="o">.</span><span class="n">addTransition</span><span class="p">(</span><span class="s2">&quot;zero&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">q0</span><span class="o">.</span><span class="n">addTransition</span><span class="p">(</span><span class="s2">&quot;one&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">q1</span><span class="o">.</span><span class="n">addTransition</span><span class="p">(</span><span class="s2">&quot;zero&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">q1</span><span class="o">.</span><span class="n">addTransition</span><span class="p">(</span><span class="s2">&quot;one&quot;</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">q2</span><span class="o">.</span><span class="n">addTransition</span><span class="p">(</span><span class="s2">&quot;zero&quot;</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">q2</span><span class="o">.</span><span class="n">addTransition</span><span class="p">(</span><span class="s2">&quot;one&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">dfa</span> <span class="o">=</span> <span class="n">FiniteStateMachine</span><span class="p">({</span><span class="mi">0</span><span class="p">:</span><span class="n">q0</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">q1</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="n">q2</span><span class="p">},</span> <span class="mi">0</span><span class="p">,</span> <span class="n">classes</span><span class="p">)</span>
+
+    <span class="c1"># You must complete the main function here but you can</span>
+    <span class="c1"># create a stream over a string s by writing</span>
+    <span class="c1"># strm = streamreader.StreamReader(io.StringIO(s))</span>
+
+<span class="k">if</span> <span class="vm">__name__</span><span class="o">==</span><span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</td></tr></table></div>
+<p>Then, there should be a method called accepts that takes a stream as input and returns true or false if the string is accepted by the finite state machine.</p>
+<p>The stream can be created by reading a string from the user and building a StringIO object over it and then a StreamReader object over the StringIO object. The program should read the string from the user by prompting the user to enter it, then it should print that the string was accepted or not. The program should continue to read strings, one line at a time, until an empty line is printed.</p>
+<p>You should use the state class from section 2.1 for your DFA states. The tokenId that may be passed on the constructor can be the state identifier for accepting states of your DFA.</p>
+<p>When run, the interaction should look like this. Your output must match this sample output exactly to be considered correctly solved.</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8</pre></div></td><td class="code"><div class="highlight"><pre><span></span>Please enter a string of a&#39;s and b&#39;s: aaabbabbaaaaabbabbbbaa
+That string is accepted by this finite state machine.
+Please enter a string of a&#39;s and b&#39;s: abcdefg
+That string is not accepted.
+Please enter a string of a&#39;s and b&#39;s: abbababababab
+That string is not accepted.
+Please enter a string of a&#39;s and b&#39;s:
+Program Completed.
+</pre></div>
+</td></tr></table></div>
+</div></blockquote>
+</li>
+<li><p class="first">Build a DFA as described in problem one for the sets of strings described in the text in exercise 2 (a)-(e) of the text on page 47.</p>
+</li>
+<li><p class="first">Build a DFA as described in problem one for the sets of strings described in the text in exercise 7 (a)-(g) of the text on page 47.</p>
+</li>
+<li><p class="first">Build a DFA as described in problem one for the sets of strings described in the text in exercise 8 (a)-(d) of the text on page 47.</p>
+</li>
+<li><p class="first">Build an NFA as described in problem 14 on page 48 with epsilon transitions. Then run the NFA to DFA algorithm on it to produce a DFA. For example, consider the following NFA.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+ 10
+ 11
+ 12
+ 13
+ 14
+ 15
+ 16
+ 17
+ 18
+ 19
+ 20
+ 21
+ 22
+ 23
+ 24
+ 25
+ 26
+ 27
+ 28
+ 29
+ 30
+ 31
+ 32
+ 33
+ 34
+ 35
+ 36
+ 37
+ 38
+ 39
+ 40
+ 41
+ 42
+ 43
+ 44
+ 45
+ 46
+ 47
+ 48
+ 49
+ 50
+ 51
+ 52
+ 53
+ 54
+ 55
+ 56
+ 57
+ 58
+ 59
+ 60
+ 61
+ 62
+ 63
+ 64
+ 65
+ 66
+ 67
+ 68
+ 69
+ 70
+ 71
+ 72
+ 73
+ 74
+ 75
+ 76
+ 77
+ 78
+ 79
+ 80
+ 81
+ 82
+ 83
+ 84
+ 85
+ 86
+ 87
+ 88
+ 89
+ 90
+ 91
+ 92
+ 93
+ 94
+ 95
+ 96
+ 97
+ 98
+ 99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">stack</span>
+<span class="kn">import</span> <span class="nn">state</span>
+<span class="kn">import</span> <span class="nn">nfastate</span>
+<span class="kn">import</span> <span class="nn">streamreader</span>
+<span class="kn">import</span> <span class="nn">orderedcollections</span>
+
+<span class="n">epsilon</span> <span class="o">=</span> <span class="s2">&quot;epsilon&quot;</span>
+
+<span class="k">class</span> <span class="nc">NFA</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">classes</span><span class="p">,</span><span class="n">states</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="n">states</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classes</span> <span class="o">=</span> <span class="n">classes</span>
+
+<span class="k">class</span> <span class="nc">DFA</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="n">orderedcollections</span><span class="o">.</span><span class="n">OrderedMap</span><span class="p">(),</span> <span class="n">states</span><span class="o">=</span><span class="n">orderedcollections</span><span class="o">.</span><span class="n">OrderedMap</span><span class="p">()):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classes</span> <span class="o">=</span> <span class="n">orderedcollections</span><span class="o">.</span><span class="n">OrderedMap</span><span class="p">(</span><span class="n">classes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="n">orderedcollections</span><span class="o">.</span><span class="n">OrderedMap</span><span class="p">(</span><span class="n">states</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">numStates</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">states</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="s2">&quot;DFA(&quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">buildFromNFA</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">nfa</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">newState</span><span class="p">():</span>
+            <span class="c1"># Add a new state to the map of stateIds to states in the state map.</span>
+            <span class="c1"># Return the new state id.</span>
+            <span class="k">pass</span>
+
+        <span class="k">def</span> <span class="nf">getAcceptingTokenId</span><span class="p">(</span><span class="n">stateSet</span><span class="p">):</span>
+            <span class="c1"># Return the first accepting tokenId found in the NFA state set. Otherwise, return None</span>
+            <span class="k">pass</span>
+
+        <span class="k">def</span> <span class="nf">EPSclosure</span><span class="p">(</span><span class="n">stateSet</span><span class="p">):</span>
+            <span class="n">closureSet</span> <span class="o">=</span> <span class="n">orderedcollections</span><span class="o">.</span><span class="n">OrderedSet</span><span class="p">(</span><span class="n">stateSet</span><span class="p">)</span>
+            <span class="c1"># Add to the closure set all NFA state Ids that are</span>
+            <span class="c1"># in the epsilon closure of this stateSet. Then</span>
+            <span class="c1"># return the OrderedFrozenSet of this closure set.</span>
+            <span class="k">pass</span>
+
+
+        <span class="k">def</span> <span class="nf">nfaTransTo</span><span class="p">(</span><span class="n">fromStates</span><span class="p">,</span> <span class="n">onClass</span><span class="p">):</span>
+            <span class="c1"># return the epsilon closure of the set of NFA states that</span>
+            <span class="c1"># you can get to on the class of characters (i.e. onClass) from</span>
+            <span class="c1"># this set of fromStates.</span>
+            <span class="k">pass</span>
+
+
+        <span class="k">def</span> <span class="nf">gatherClasses</span><span class="p">(</span><span class="n">states</span><span class="p">):</span>
+            <span class="c1"># return the set of classes of transitions (i.e. classes of characters)</span>
+            <span class="c1"># that are possible transitions from this set of NFA states.</span>
+            <span class="k">pass</span>
+
+        <span class="c1"># This is the beginning of the buildFromNFA method.</span>
+        <span class="c1"># Copy over the classes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classes</span> <span class="o">=</span> <span class="n">nfa</span><span class="o">.</span><span class="n">classes</span>
+
+
+        <span class="c1"># Create the start state and the DFA to NFA stateMap.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">startStateId</span> <span class="o">=</span> <span class="n">newState</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stateMap</span> <span class="o">=</span> <span class="n">orderedcollections</span><span class="o">.</span><span class="n">OrderedMap</span><span class="p">()</span>
+
+
+        <span class="c1"># Form the epsilon closure of the NFA start state (i.e. state 0) and then</span>
+        <span class="c1"># map the start state of the DFA to the start state set of the NFA</span>
+
+
+        <span class="c1"># keep track of the new DFA states. The first new DFA state is the start</span>
+        <span class="c1"># state. You can keep track of this as an ordered set or a stack if you wish.</span>
+
+        <span class="c1"># map the set of nfa state ids (as a frozen set) to the new DFA state id in the</span>
+        <span class="c1"># nfa2dfa map.</span>
+
+
+        <span class="c1"># set the new DFA state to accepting if the NFA states contained an accepting state.</span>
+        <span class="c1"># You can use the getAcceptingTokenId function for this.</span>
+
+
+        <span class="c1"># While there are no more unexplored states in the new DFA state set, follow the algorithm</span>
+        <span class="c1"># given on the website by using the nfaTransTo function and creating new DFA states for each</span>
+        <span class="c1"># new set of NFA states that are found by using gatherClasses. Remember to set accepting states</span>
+        <span class="c1"># in the DFA as you proceed.</span>
+
+        <span class="c1"># Code goes here</span>
+
+    <span class="c1"># The writeListing method is provided assuming you used the correct data structures</span>
+    <span class="c1"># in your code.</span>
+
+    <span class="k">def</span> <span class="nf">writeListing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outStream</span><span class="p">):</span>
+
+        <span class="n">outStream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;The start state is: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">startStateId</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">outStream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;STATE     ON CLASS     GO TO     ACCEPTS</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">outStream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;-----     --------     -----     -------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">stateId</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numStates</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">stateId</span><span class="p">]</span><span class="o">.</span><span class="n">isAccepting</span><span class="p">():</span>
+                <span class="n">acceptsId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">stateId</span><span class="p">]</span><span class="o">.</span><span class="n">getAcceptsTokenId</span><span class="p">()</span>
+                <span class="n">tokenName</span> <span class="o">=</span> <span class="s2">&quot;yes&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">tokenName</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+            <span class="n">outStream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%5d</span><span class="s2"> </span><span class="si">%34s</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">stateId</span><span class="p">,</span><span class="n">tokenName</span><span class="p">))</span>
+
+            <span class="n">trans</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">stateId</span><span class="p">]</span><span class="o">.</span><span class="n">getTransitions</span><span class="p">()</span>
+
+            <span class="k">for</span> <span class="n">onClass</span> <span class="ow">in</span> <span class="n">trans</span><span class="p">:</span>
+                <span class="n">outStream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%18s</span><span class="s2">     </span><span class="si">%5d</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">onClass</span><span class="p">,</span><span class="n">trans</span><span class="p">[</span><span class="n">onClass</span><span class="p">]))</span>
+
+            <span class="n">outStream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+
+    <span class="n">classes</span> <span class="o">=</span> <span class="p">{</span><span class="n">epsilon</span><span class="p">:</span><span class="nb">frozenset</span><span class="p">([]),</span> <span class="s2">&quot;zero&quot;</span><span class="p">:</span><span class="nb">frozenset</span><span class="p">([</span><span class="mi">0</span><span class="p">]),</span> <span class="s2">&quot;one&quot;</span><span class="p">:</span> <span class="nb">frozenset</span><span class="p">([</span><span class="mi">1</span><span class="p">])}</span>
+
+    <span class="n">q0</span> <span class="o">=</span> <span class="n">nfastate</span><span class="o">.</span><span class="n">NFAState</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">q1</span> <span class="o">=</span> <span class="n">nfastate</span><span class="o">.</span><span class="n">NFAState</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">q2</span> <span class="o">=</span> <span class="n">nfastate</span><span class="o">.</span><span class="n">NFAState</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+
+    <span class="n">q0</span><span class="o">.</span><span class="n">addTransition</span><span class="p">(</span><span class="s2">&quot;zero&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">q0</span><span class="o">.</span><span class="n">addTransition</span><span class="p">(</span><span class="s2">&quot;one&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">q1</span><span class="o">.</span><span class="n">addTransition</span><span class="p">(</span><span class="s2">&quot;one&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">q1</span><span class="o">.</span><span class="n">addTransition</span><span class="p">(</span><span class="s2">&quot;zero&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">q1</span><span class="o">.</span><span class="n">addTransition</span><span class="p">(</span><span class="s2">&quot;zero&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">q1</span><span class="o">.</span><span class="n">addTransition</span><span class="p">(</span><span class="n">epsilon</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">q2</span><span class="o">.</span><span class="n">addTransition</span><span class="p">(</span><span class="s2">&quot;one&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">states</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span><span class="n">q0</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">q1</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="n">q2</span><span class="p">}</span>
+
+    <span class="n">nfa</span> <span class="o">=</span> <span class="n">NFA</span><span class="p">(</span><span class="n">classes</span><span class="p">,</span> <span class="n">states</span><span class="p">)</span>
+
+    <span class="n">dfa</span> <span class="o">=</span> <span class="n">DFA</span><span class="p">()</span>
+    <span class="n">dfa</span><span class="o">.</span><span class="n">buildFromNFA</span><span class="p">(</span><span class="n">nfa</span><span class="p">)</span>
+    <span class="n">dfa</span><span class="o">.</span><span class="n">writeListing</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+
+
+<span class="n">main</span><span class="p">()</span>
+</pre></div>
+</td></tr></table></div>
+</div></blockquote>
+<p>Write the required code to get output like the following sample output from running this program. You may assume that state 0 is the start state of the NFA.</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15</pre></div></td><td class="code"><div class="highlight"><pre><span></span>The start state is: 0
+
+STATE     ON CLASS     GO TO     ACCEPTS
+-----     --------     -----     -------
+    0
+               one         1
+              zero         1
+
+    1                                Yes
+               one         1
+              zero         2
+
+    2
+               one         1
+              zero         1
+</pre></div>
+</td></tr></table></div>
+</div></blockquote>
+</li>
+<li><p class="first">Minimize a DFA according to the DFA Minimization algorithm. Use the data provided in the section on DFA minimization. Use the shell program below to get started. You need to complete the three functions that have <em>pass</em> written in them and the calling of finer which is described below and has a comment <strong>WRITE THE CODE DESCRIBED ABOVE HERE</strong>.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+ 10
+ 11
+ 12
+ 13
+ 14
+ 15
+ 16
+ 17
+ 18
+ 19
+ 20
+ 21
+ 22
+ 23
+ 24
+ 25
+ 26
+ 27
+ 28
+ 29
+ 30
+ 31
+ 32
+ 33
+ 34
+ 35
+ 36
+ 37
+ 38
+ 39
+ 40
+ 41
+ 42
+ 43
+ 44
+ 45
+ 46
+ 47
+ 48
+ 49
+ 50
+ 51
+ 52
+ 53
+ 54
+ 55
+ 56
+ 57
+ 58
+ 59
+ 60
+ 61
+ 62
+ 63
+ 64
+ 65
+ 66
+ 67
+ 68
+ 69
+ 70
+ 71
+ 72
+ 73
+ 74
+ 75
+ 76
+ 77
+ 78
+ 79
+ 80
+ 81
+ 82
+ 83
+ 84
+ 85
+ 86
+ 87
+ 88
+ 89
+ 90
+ 91
+ 92
+ 93
+ 94
+ 95
+ 96
+ 97
+ 98
+ 99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># Here is the output from running this.</span>
+<span class="c1"># Kent&#39;s Mac&gt; python3 dfa2mindfa.py</span>
+<span class="c1"># The MINIMAL DFA CREATED FOR THE REGULAR EXPRESSIONS IS:</span>
+
+<span class="c1"># The start state is: 0</span>
+
+<span class="c1"># STATE     ON CLASS     GO TO     ACCEPTS</span>
+<span class="c1"># -----     --------     -----     -------</span>
+<span class="c1">#     0</span>
+<span class="c1">#                  a         2</span>
+
+<span class="c1">#     1                                yes</span>
+<span class="c1">#                  a         2</span>
+
+<span class="c1">#     2</span>
+<span class="c1">#                  b         4</span>
+
+<span class="c1">#     3</span>
+<span class="c1">#                  a         1</span>
+
+<span class="c1">#     4</span>
+<span class="c1">#                  b         3</span>
+
+<span class="kn">import</span> <span class="nn">state</span>
+<span class="kn">import</span> <span class="nn">orderedcollections</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+
+<span class="k">class</span> <span class="nc">DFA</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">classes</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">startStateId</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classes</span> <span class="o">=</span> <span class="n">classes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="n">states</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">startStateId</span> <span class="o">=</span> <span class="n">startStateId</span>
+
+<span class="k">class</span> <span class="nc">MinimalDFA</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classes</span> <span class="o">=</span> <span class="n">orderedcollections</span><span class="o">.</span><span class="n">OrderedMap</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="n">orderedcollections</span><span class="o">.</span><span class="n">OrderedMap</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">numStates</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">buildFromDFA</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dfa</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">newState</span><span class="p">():</span>
+            <span class="n">aState</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">State</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numStates</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">numStates</span><span class="p">]</span> <span class="o">=</span> <span class="n">aState</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">numStates</span><span class="o">+=</span><span class="mi">1</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">numStates</span><span class="o">-</span><span class="mi">1</span>
+
+        <span class="c1"># Returns the Minimized DFA Partition Id given</span>
+        <span class="c1"># a DFA State and Input symbol class.</span>
+        <span class="k">def</span> <span class="nf">transToMinPartition</span><span class="p">(</span><span class="n">fromDFAStateId</span><span class="p">,</span> <span class="n">onClass</span><span class="p">):</span>
+            <span class="k">pass</span>
+
+        <span class="c1"># Returns an ordered set of all the character classes</span>
+        <span class="c1"># of all DFA states in a minimized DFA partition.</span>
+        <span class="k">def</span> <span class="nf">onClasses</span><span class="p">(</span><span class="n">minStateId</span><span class="p">):</span>
+            <span class="k">pass</span>
+
+        <span class="k">def</span> <span class="nf">finer</span><span class="p">(</span><span class="n">minStateId</span><span class="p">):</span>
+            <span class="c1">#(********************************************************************************)</span>
+            <span class="c1">#(* Check each node in the given partition (the one passed as a parameter)       *)</span>
+            <span class="c1">#(* with the first node in the partition. If a node is found that transitions    *)</span>
+            <span class="c1">#(* to a different partition than the first node on the same input make a new    *)</span>
+            <span class="c1">#(* set with this node and put all subsequent nodes that don&#39;t have similar      *)</span>
+            <span class="c1">#(* transitions to the first node into this new set. After going through all     *)</span>
+            <span class="c1">#(* states, if the new set of distinquished states is not empty then create a    *)</span>
+            <span class="c1">#(* new partition and then remove all states in the set from the current         *)</span>
+            <span class="c1">#(* partition and add them to the new partion (i.e. minimal state). Return true  *)</span>
+            <span class="c1">#(* if a new partition was created and false otherwise. Aho, Sethi, Ullman p. 142*)</span>
+            <span class="c1">#(********************************************************************************)</span>
+            <span class="k">pass</span>
+
+
+        <span class="c1"># Run through all the states and make transitions</span>
+        <span class="c1"># in the minimized DFA for all transitions that existed</span>
+        <span class="c1"># in the unminimized DFA. Also sets the state to be accepting</span>
+        <span class="c1"># if any state in the unminimized DFA was accepting.</span>
+        <span class="k">def</span> <span class="nf">constructMinStateTransitions</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">minStateId</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">:</span>
+                <span class="n">minState</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">minStateId</span><span class="p">]</span>
+
+                <span class="c1"># Find the first dfa stateid in the set</span>
+                <span class="n">dfaStateIds</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">min2dfa</span><span class="p">[</span><span class="n">minStateId</span><span class="p">])</span>
+                <span class="n">dfaStateIds</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+                <span class="n">dfaStateId</span> <span class="o">=</span> <span class="n">dfaStateIds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="n">dfa</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">dfaStateId</span><span class="p">]</span><span class="o">.</span><span class="n">isAccepting</span><span class="p">():</span>
+                    <span class="n">minState</span><span class="o">.</span><span class="n">setAccepting</span><span class="p">(</span><span class="n">dfa</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">dfaStateId</span><span class="p">]</span><span class="o">.</span><span class="n">getAcceptsTokenId</span><span class="p">())</span>
+                <span class="n">minState</span><span class="o">.</span><span class="n">transitions</span> <span class="o">=</span> <span class="p">{}</span>
+
+                <span class="n">trans</span> <span class="o">=</span> <span class="n">dfa</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">dfaStateId</span><span class="p">]</span><span class="o">.</span><span class="n">getTransitions</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">onClass</span> <span class="ow">in</span> <span class="n">trans</span><span class="p">:</span>
+                    <span class="n">toDFAStateId</span> <span class="o">=</span> <span class="n">trans</span><span class="p">[</span><span class="n">onClass</span><span class="p">]</span>
+                    <span class="n">dfaState</span> <span class="o">=</span> <span class="n">dfa</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">toDFAStateId</span><span class="p">]</span>
+                    <span class="n">toStateId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfa2min</span><span class="p">[</span><span class="n">toDFAStateId</span><span class="p">]</span>
+                    <span class="n">minState</span><span class="o">.</span><span class="n">addTransition</span><span class="p">(</span><span class="n">onClass</span><span class="p">,</span><span class="n">toStateId</span><span class="p">)</span>
+
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">startStateId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfa2min</span><span class="p">[</span><span class="n">dfa</span><span class="o">.</span><span class="n">startStateId</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">classes</span> <span class="o">=</span> <span class="n">dfa</span><span class="o">.</span><span class="n">classes</span>
+
+
+        <span class="n">startStateId</span> <span class="o">=</span> <span class="n">newState</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min2dfa</span> <span class="o">=</span> <span class="n">orderedcollections</span><span class="o">.</span><span class="n">OrderedMap</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dfa2min</span> <span class="o">=</span> <span class="n">orderedcollections</span><span class="o">.</span><span class="n">OrderedMap</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">min2dfa</span><span class="p">[</span><span class="n">startStateId</span><span class="p">]</span> <span class="o">=</span> <span class="n">orderedcollections</span><span class="o">.</span><span class="n">OrderedSet</span><span class="p">()</span>
+
+        <span class="c1"># Build state sets. One with all</span>
+        <span class="c1"># the non-final states in it, and one</span>
+        <span class="c1"># for each accepting state of the dfa</span>
+        <span class="c1"># since we want separate accepting states</span>
+        <span class="c1"># for all the tokens of the dfa.</span>
+
+        <span class="k">for</span> <span class="n">stateId</span> <span class="ow">in</span> <span class="n">dfa</span><span class="o">.</span><span class="n">states</span><span class="p">:</span>
+            <span class="n">dfaState</span> <span class="o">=</span> <span class="n">dfa</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">stateId</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">dfaState</span><span class="o">.</span><span class="n">isAccepting</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">min2dfa</span><span class="p">[</span><span class="n">startStateId</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">stateId</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dfa2min</span><span class="p">[</span><span class="n">stateId</span><span class="p">]</span> <span class="o">=</span> <span class="n">startStateId</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Now we have to either add another partition (i.e. state) or</span>
+                <span class="c1"># find the accepting state that this dfa state belongs to.</span>
+
+                <span class="n">found</span> <span class="o">=</span> <span class="bp">False</span>
+
+                <span class="k">for</span> <span class="n">minStateId</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">:</span>
+                    <span class="n">minState</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">minStateId</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">minState</span><span class="o">.</span><span class="n">getAcceptsTokenId</span><span class="p">()</span> <span class="o">==</span> <span class="n">dfaState</span><span class="o">.</span><span class="n">getAcceptsTokenId</span><span class="p">():</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">min2dfa</span><span class="p">[</span><span class="n">minStateId</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">stateId</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">dfa2min</span><span class="p">[</span><span class="n">stateId</span><span class="p">]</span> <span class="o">=</span> <span class="n">minStateId</span>
+                        <span class="n">found</span> <span class="o">=</span> <span class="bp">True</span>
+
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">found</span><span class="p">:</span>
+                    <span class="n">finalStateId</span> <span class="o">=</span> <span class="n">newState</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">min2dfa</span><span class="p">[</span><span class="n">finalStateId</span><span class="p">]</span> <span class="o">=</span> <span class="n">orderedcollections</span><span class="o">.</span><span class="n">OrderedSet</span><span class="p">([</span><span class="n">stateId</span><span class="p">])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dfa2min</span><span class="p">[</span><span class="n">stateId</span><span class="p">]</span> <span class="o">=</span> <span class="n">finalStateId</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">finalStateId</span><span class="p">]</span><span class="o">.</span><span class="n">setAccepting</span><span class="p">(</span><span class="n">dfaState</span><span class="o">.</span><span class="n">getAcceptsTokenId</span><span class="p">())</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">startStateId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfa2min</span><span class="p">[</span><span class="n">dfa</span><span class="o">.</span><span class="n">startStateId</span><span class="p">]</span>
+
+        <span class="c1"># Now begin partitioning by finding distinguishable states</span>
+        <span class="c1"># You must write code here to repeatedly call finer on all states</span>
+        <span class="c1"># of the minimized DFA until no more changes can be made.</span>
+
+        <span class="c1"># WRITE THE CODE DESCRIBED ABOVE HERE.</span>
+
+
+        <span class="c1"># After we are done splitting the states we call constructMinStateTransitions</span>
+        <span class="c1"># to build the transitions in the new states.</span>
+        <span class="n">constructMinStateTransitions</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">writeListing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outStream</span><span class="p">):</span>
+
+        <span class="n">outStream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;The MINIMAL DFA CREATED FOR THE REGULAR EXPRESSIONS IS:</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">outStream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;The start state is: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">startStateId</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">outStream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;STATE     ON CLASS     GO TO     ACCEPTS</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">outStream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;-----     --------     -----     -------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">stateId</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numStates</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">stateId</span><span class="p">]</span><span class="o">.</span><span class="n">isAccepting</span><span class="p">():</span>
+                <span class="n">acceptsId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">stateId</span><span class="p">]</span><span class="o">.</span><span class="n">getAcceptsTokenId</span><span class="p">()</span>
+                <span class="n">tokenName</span> <span class="o">=</span> <span class="s2">&quot;yes&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">tokenName</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+            <span class="n">outStream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%5d</span><span class="s2"> </span><span class="si">%34s</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">stateId</span><span class="p">,</span><span class="n">tokenName</span><span class="p">))</span>
+
+            <span class="n">trans</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">stateId</span><span class="p">]</span><span class="o">.</span><span class="n">getTransitions</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">onClass</span> <span class="ow">in</span> <span class="n">trans</span><span class="p">:</span>
+                <span class="n">outStream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%18s</span><span class="s2">     </span><span class="si">%5d</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">onClass</span><span class="p">,</span><span class="n">trans</span><span class="p">[</span><span class="n">onClass</span><span class="p">]))</span>
+
+            <span class="n">outStream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+
+    <span class="n">classes</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span><span class="nb">frozenset</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">]),</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="nb">frozenset</span><span class="p">([</span><span class="s1">&#39;b&#39;</span><span class="p">])}</span>
+
+    <span class="n">q0</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">State</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">q1</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">State</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">q2</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">State</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">q3</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">State</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">q4</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">State</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">q5</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">State</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">q6</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">State</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+
+
+
+    <span class="n">q0</span><span class="o">.</span><span class="n">addTransition</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">q1</span><span class="o">.</span><span class="n">addTransition</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">q2</span><span class="o">.</span><span class="n">addTransition</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">q3</span><span class="o">.</span><span class="n">addTransition</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="n">q4</span><span class="o">.</span><span class="n">addTransition</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="n">q5</span><span class="o">.</span><span class="n">addTransition</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+    <span class="n">q6</span><span class="o">.</span><span class="n">addTransition</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+
+    <span class="n">states</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span><span class="n">q0</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">q1</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="n">q2</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span><span class="n">q3</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span><span class="n">q4</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span><span class="n">q5</span><span class="p">,</span> <span class="mi">6</span><span class="p">:</span><span class="n">q6</span><span class="p">}</span>
+
+    <span class="n">dfa</span> <span class="o">=</span> <span class="n">DFA</span><span class="p">(</span><span class="n">classes</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">mindfa</span> <span class="o">=</span> <span class="n">MinimalDFA</span><span class="p">()</span>
+    <span class="n">mindfa</span><span class="o">.</span><span class="n">buildFromDFA</span><span class="p">(</span><span class="n">dfa</span><span class="p">)</span>
+    <span class="n">mindfa</span><span class="o">.</span><span class="n">writeListing</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+
+
+<span class="n">main</span><span class="p">()</span>
+</pre></div>
+</td></tr></table></div>
+</div></blockquote>
+</li>
+</ol>
+<p>7. Write a program that reads a description of a language, like that given in the section on the converting regular expressions to NFA’s in <a class="reference internal" href="#regular-expressions-to-nfas">Regular Expressions To NFAs</a>.
+Use the program shell <a class="reference external" href="http://cs.luther.edu/~leekent/ComputationalModels/examplefiles/RE2NFA.py">RE2NFA.py</a> to start your program. Then you must complete the regular expression calculator as described in <a class="reference internal" href="#regular-expressions-to-nfas">Regular Expressions To NFAs</a>.  See the clearly marked sections of the shell program for what you must complete and what each function should return. Use the file <a class="reference external" href="http://cs.luther.edu/~leekent/ComputationalModels/examplefiles/jpython.txt">jpython.txt</a> as your input file. The output from your program should then be <a class="reference external" href="http://cs.luther.edu/~leekent/ComputationalModels/examplefiles/nfa.txt">this nfa</a>.</p>
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Computational Models  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Kent D. Lee.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.
+    </div>
+  </body>
+</html>
