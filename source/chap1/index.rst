@@ -88,7 +88,7 @@ Another way to prove a statement is true or false is through the use of equivale
 	5. :math:`A \wedge (B \vee C) \iff (A \wedge B) \vee (A \wedge C)`, *Distribution*
 	6. :math:`A \vee (B \wedge C) \iff (A \vee B) \wedge (A \vee C)`, *Distribution*
 	7. :math:`A\rightarrow B \iff A' \vee B`, *Implication*
-	8. :math:`(A \vee B) \wedge B' \iff A`, *Simplification*
+	8. :math:`(A \vee B) \Longrightarrow B' \iff A`, *Simplification*
 	9. :math:`A \wedge A' \iff False`, *Complementation*
 	10. :math:`A \vee A' \iff True`, *Complementation*
 	11. :math:`A \wedge A \iff A`, *Idempotent*
@@ -109,9 +109,9 @@ Another way to prove a statement is true or false is through the use of equivale
 
 In proofs we may also use some rules of inference when trying to infer whether a statement is true or false. Here are the rules of inference.
 
-	24. :math:`A \wedge (A \rightarrow B) \iff B`, *modus ponens*
-	25. :math:`(A \rightarrow B) \wedge B' \iff A'` *modus tolens*
-	26. :math:`(A \vee B) \wedge (A' \vee C) \iff B \vee C`, *resolution*
+	24. :math:`A \wedge (A \rightarrow B) \Longrightarrow B`, *modus ponens*
+	25. :math:`(A \rightarrow B) \wedge B' \Longrightarrow A'` *modus tolens*
+	26. :math:`(A \vee B) \wedge (A' \vee C) \Longrightarrow B \vee C`, *resolution*
 
 
 Proof by Derivation
